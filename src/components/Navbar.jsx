@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../assets/icons/site-logo.png";
 import Swal from "sweetalert2";
+import { NavLink } from "react-router-dom";
 import { auth } from "../firebase/config.js";
 import {
   GoogleAuthProvider,
@@ -120,7 +121,7 @@ function AccountDrawer() {
               ✕
             </button>
           </form>
-          <div className="p-3 flex flex-col gap-3">
+          <div className="p-3 flex flex-col gap-5">
             <div className="flex justify-center font-[Ubuntu]">
               <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
                 <legend className="font-bold text-2xl text-center">
@@ -161,6 +162,12 @@ function AccountDrawer() {
                 <i className="fa-brands fa-github text-xl"></i>
                 <p className="font-bold">Github</p>
               </div>
+            </div>
+            <div className="text-center">
+              <p className="font-medium">Dont have an Account?</p>
+              <NavLink to="/register">
+                <a className="link link-neutral">Register</a>
+              </NavLink>
             </div>
           </div>
         </div>
