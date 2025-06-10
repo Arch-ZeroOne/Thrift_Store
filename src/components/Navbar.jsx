@@ -1,5 +1,18 @@
 import React from "react";
 import Logo from "../assets/icons/site-logo.png";
+import Swal from "sweetalert2";
+import { auth } from "../firebase/config.js";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  GithubAuthProvider,
+} from "firebase/auth";
+import { useRef } from "react";
+
+//providers for different sign in types
+const google_provider = new GoogleAuthProvider();
+const github_provider = new GithubAuthProvider();
+
 function Navbar() {
   return (
     <div className="font-[Ubuntu] flex justify-between p-4 shadow-lg">
@@ -35,14 +48,7 @@ function Links() {
 
 function SearchBar() {
   return (
-    <div className="flex items-center border rounded-lg p-2 h-10 font-[Ubuntu] w-70 justify-center">
-      <input
-        type="text "
-        placeholder="Search for A Product"
-        className="outline-0 text-sm"
-      ></input>
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </div>
+    <input type="text" placeholder="Search for a product" className="input" />
   );
 }
 
@@ -56,7 +62,7 @@ function CartDrawer() {
             htmlFor="my-drawer-4"
             className="drawer-button btn btn-primary"
           >
-            <i class="fa-solid fa-cart-shopping text-xl"></i>
+            <i className="fa-solid fa-cart-shopping text-xl"></i>
           </label>
         </div>
         <div className="drawer-side">
@@ -80,7 +86,9 @@ function CartDrawer() {
                 <p className="text-xl">Total</p>
                 <p className="text-xl">$0:00</p>
               </div>
-              <button class="btn btn-dash btn-primary w-40">Checkout</button>
+              <button className="btn btn-dash btn-primary w-40">
+                Checkout
+              </button>
             </div>
           </div>
         </div>
@@ -90,34 +98,98 @@ function CartDrawer() {
 }
 
 function AccountDrawer() {
+  const modalRef = useRef();
+
+  function closeModal() {
+    modalRef.current.closeModal();
+  }
+
+  function showModal() {
+    modalRef.current.showModal();
+  }
   return (
     <div className="font-[Ubuntu]">
-      <div className="dropdown dropdown-bottom dropdown-center">
-        <div tabIndex={0} role="button" className="btn m-1">
-          <i class="fa-solid fa-user text-xl"></i>
+      <button className="btn" onClick={() => showModal()}>
+        <i className="fa-solid fa-user text-lg"></i>
+      </button>
+      <dialog id="my_modal_3" className="modal" ref={modalRef}>
+        <div className="modal-box">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <div className="p-3 flex flex-col gap-3">
+            <div className="flex justify-center font-[Ubuntu]">
+              <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                <legend className="font-bold text-2xl text-center">
+                  Login
+                </legend>
+
+                <label className="font-medium text-lg">Email</label>
+                <input type="email" className="input" placeholder="Email" />
+
+                <label className="text-lg font-medium">Password</label>
+                <input
+                  type="password"
+                  className="input"
+                  placeholder="Password"
+                />
+
+                <button className="btn btn-neutral mt-4">Login</button>
+              </fieldset>
+            </div>
+            <div className="flex items-center gap-3 justify-center cursor-pointer">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => ToggleForm(google_provider, modalRef)}
+              >
+                <i className="fa-brands fa-google text-xl"></i>
+                <p className="font-bold">Google</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <i className="fa-brands fa-facebook text-xl"></i>
+                <p className="font-bold">Facebook</p>
+              </div>
+
+              <div
+                className="flex items-center gap-2"
+                onClick={() => ToggleForm(github_provider, modalRef)}
+              >
+                <i className="fa-brands fa-github text-xl"></i>
+                <p className="font-bold">Github</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <ul
-          style={{
-            width: "30rem",
-          }}
-          tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-1 w-80 p-2 shadow-sm"
-        >
-          <li>
-            <div className="flex items-center gap-2">
-              <i class="fa-brands fa-google text-xl"></i>
-              <p className="font-bold">Facebook</p>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center gap-2">
-              <i class="fa-brands fa-facebook text-xl"></i>
-              <p className="font-bold">Google</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+      </dialog>
     </div>
   );
 }
+
+function ToggleForm(provider, modalRef) {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result);
+      const user = result.user;
+      const { displayName } = user;
+      modalRef.current.close();
+      showSuccess(displayName);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return null;
+}
+
+function showSuccess(displayName) {
+  Swal.fire({
+    icon: "success",
+    title: "Logged in!",
+    text: `Welcome Back ${displayName} !!`,
+  });
+}
+
 export default Navbar;
