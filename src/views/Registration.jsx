@@ -3,6 +3,7 @@ import Icon from "../assets/images/e-commerce.png";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useRef } from "react";
+import Swal from "sweetalert2";
 function Registration() {
   return (
     <div className="flex gap-3 justify-between mt-10 shadow-2xl w-[60%]  ml-auto mr-auto  rounded-lg h-130 items-center font-[Ubuntu]  ">
@@ -28,6 +29,10 @@ function Registration() {
 function Form() {
   const email_ref = useRef();
   const password_ref = useRef();
+
+  function handleRegistration() {
+    SignIn(email_ref.current, password_ref.current);
+  }
   return (
     <section className="font-[Ubuntu]  flex flex-col items-center gap-5 ">
       <div>
@@ -44,16 +49,15 @@ function Form() {
               fill="none"
               stroke="currentColor"
             >
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
             </g>
           </svg>
           <input
-            type="text"
+            type="email"
+            placeholder="email@site.com"
             required
-            placeholder="Username"
-            minlength="3"
-            maxlength="30"
+            ref={email_ref}
           />
         </label>
       </div>
@@ -80,11 +84,17 @@ function Form() {
             required
             placeholder="Password"
             minlength="8"
+            ref={password_ref}
           />
         </label>
       </div>
       <div>
-        <button className="btn btn-neutral w-50 rounded-xl">Sign Up</button>
+        <button
+          className="btn btn-neutral w-50 rounded-xl"
+          onClick={() => handleRegistration()}
+        >
+          Sign Up
+        </button>
       </div>
     </section>
   );
@@ -128,6 +138,46 @@ function IconBox({ name, icon }) {
       </div>
     </div>
   );
+}
+
+function SignIn(gmail, password) {
+  createUserWithEmailAndPassword(auth, gmail.value, password.value)
+    .then((credential) => {
+      const user = credential.user;
+      const { email } = user;
+      showSuccess(email, gmail, password);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function showSuccess(username, emailRef, passwordRef) {
+  let timerInterval;
+  Swal.fire({
+    title: "Registration Successfull!",
+    html: `${username} was successfully registered`,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const timer = Swal.getPopup().querySelector("b");
+      timerInterval = setInterval(() => {
+        timer.textContent = `${Swal.getTimerLeft()}`;
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    },
+  }).then((result) => {
+    /* Read more about handling dismissals below */
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log(emailRef);
+      console.log(passwordRef);
+      emailRef.current.value = "";
+      passwordRef.current.value = "";
+    }
+  });
 }
 
 export default Registration;
