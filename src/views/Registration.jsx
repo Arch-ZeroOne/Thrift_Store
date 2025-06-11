@@ -6,7 +6,7 @@ import { useRef } from "react";
 import Swal from "sweetalert2";
 function Registration() {
   return (
-    <div className="flex gap-3 justify-between mt-10 shadow-2xl w-[60%]  ml-auto mr-auto  rounded-lg h-130 items-center font-[Ubuntu]  ">
+    <div className="flex gap-3 justify-between mt-10 shadow-2xl w-[60%]  ml-auto mr-auto  rounded-lg h-130 items-center font-[Ubuntu]">
       <div className="flex items-center flex-col  gap-5 p-5">
         <div className="flex flex-col gap-3">
           <h2 className="font-bold text-2xl text-center ">
@@ -174,8 +174,8 @@ function showSuccess(username, emailRef, passwordRef) {
     if (result.dismiss === Swal.DismissReason.timer) {
       console.log(emailRef);
       console.log(passwordRef);
-      emailRef.current.value = "";
-      passwordRef.current.value = "";
+      emailRef.value = "";
+      passwordRef.value = "";
     }
   });
 }
