@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import Logo from "../assets/icons/site-logo.png";
 import Swal from "sweetalert2";
 import { NavLink } from "react-router-dom";
@@ -7,12 +7,19 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   GithubAuthProvider,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useRef } from "react";
+import { Code } from "firebase/data-connect";
 
 //providers for different sign in types
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
+
+export const ERR0R_CODE = {
+  INVALID_EMAIL: "auth/invalid-email",
+  INVALID_CREDENTIALS: "auth/invalid-credential",
+};
 
 function Navbar() {
   return (
@@ -100,9 +107,13 @@ function CartDrawer() {
 
 function AccountDrawer() {
   const modalRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   function closeModal() {
-    modalRef.current.closeModal();
+    modalRef.current.close();
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
   }
 
   function showModal() {
@@ -116,8 +127,10 @@ function AccountDrawer() {
       <dialog id="my_modal_3" className="modal" ref={modalRef}>
         <div className="modal-box">
           <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            <button
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              onClick={() => closeModal()}
+            >
               ✕
             </button>
           </form>
@@ -129,16 +142,29 @@ function AccountDrawer() {
                 </legend>
 
                 <label className="font-medium text-lg">Email</label>
-                <input type="email" className="input" placeholder="Email" />
+                <input
+                  type="email"
+                  className="input"
+                  placeholder="Email"
+                  ref={emailRef}
+                />
 
                 <label className="text-lg font-medium">Password</label>
                 <input
                   type="password"
                   className="input"
                   placeholder="Password"
+                  ref={passwordRef}
                 />
 
-                <button className="btn btn-neutral mt-4">Login</button>
+                <button
+                  className="btn btn-neutral mt-4"
+                  onClick={() =>
+                    signIn(emailRef.current, passwordRef.current, modalRef)
+                  }
+                >
+                  Login
+                </button>
               </fieldset>
             </div>
             <div className="flex items-center gap-3 justify-center cursor-pointer">
@@ -148,11 +174,6 @@ function AccountDrawer() {
               >
                 <i className="fa-brands fa-google text-xl"></i>
                 <p className="font-bold">Google</p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <i className="fa-brands fa-facebook text-xl"></i>
-                <p className="font-bold">Facebook</p>
               </div>
 
               <div
@@ -166,7 +187,9 @@ function AccountDrawer() {
             <div className="text-center">
               <p className="font-medium">Dont have an Account?</p>
               <NavLink to="/register">
-                <a className="link link-neutral">Register</a>
+                <li className="link link-neutral list-none underline-offset-2">
+                  Register
+                </li>
               </NavLink>
             </div>
           </div>
@@ -179,7 +202,6 @@ function AccountDrawer() {
 function ToggleForm(provider, modalRef) {
   signInWithPopup(auth, provider)
     .then((result) => {
-      console.log(result);
       const user = result.user;
       const { displayName } = user;
       modalRef.current.close();
@@ -191,7 +213,32 @@ function ToggleForm(provider, modalRef) {
   return null;
 }
 
-function showSuccess(displayName) {
+function signIn(emailRef, passwordRef, modal) {
+  signInWithEmailAndPassword(auth, emailRef.value, passwordRef.value)
+    .then((credential) => {
+      const user = credential.user;
+      const { displayName } = user;
+      showSuccess(displayName);
+      emailRef.value = "";
+      passwordRef.value = "";
+    })
+    .catch((error) => {
+      console.log(error);
+      const code = error.code;
+      console.log(code);
+
+      switch (code) {
+        case ERR0R_CODE.INVALID_EMAIL:
+          showError("Invalid Email", modal);
+          break;
+        case ERR0R_CODE.INVALID_CREDENTIALS:
+          showError("Invalid Credentials", modal);
+          break;
+      }
+    });
+}
+
+export function showSuccess(displayName) {
   Swal.fire({
     icon: "success",
     title: "Logged in!",
@@ -199,4 +246,16 @@ function showSuccess(displayName) {
   });
 }
 
+export function showError(message, modal) {
+  modal.current.close();
+  Swal.fire({
+    icon: "error",
+    title: message,
+    text: "User was not found please check your email and password",
+  }).then((response) => {
+    modal.current.showModal();
+  });
+}
+
+function closeModal() {}
 export default Navbar;
