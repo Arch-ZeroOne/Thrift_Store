@@ -11,6 +11,8 @@
     "tailwind": "npx @tailwindcss/cli -i ./src/assets/css/input.css -o ./src/assets/css/output.css --watch"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.14.3",
+    "@cloudinary/url-gen": "^1.21.0",
     "@shadcn/ui": "^0.0.4",
     "@tailwindcss/cli": "^4.1.8",
     "animate.css": "^4.1.1",
