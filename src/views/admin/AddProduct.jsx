@@ -2,7 +2,8 @@ import React, { useRef } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Overview from "../../components/Overview";
-import { getFirestore } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { firestore } from "../../firebase/config";
 
 function AddProduct() {
   return (
@@ -30,37 +31,20 @@ function Form() {
   const imageRef = useRef();
 
   //async since we are gonna perform requests
-  async function handleSubmit(event) {
-    //gets the current image file in the input which is being uploaded
-    //not specifying the index caused an error during the request
-    const file = imageRef.current.files[0];
-    console.log(file);
-
-    //error handling if file is empty
-    if (!file) return;
-    //needed to submit data to the cloud or any backend
-    const data = new FormData();
-    //accepts a key value pair
-    //"file" is a fixed keyword for cloudinary
-    data.append("file", file);
-    //The preset in the cloudinary upload preset section
-    data.append("upload_preset", "demo_image");
-    //cloud name is in API keys section then Cloud name:
-    data.append("cloud_name", "dwuelxoyn");
-
-    console.log(data.getAll("file"));
-
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dwuelxoyn/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
+  async function handleSubmit() {
+    const url = getUploadUrl(imageRef);
+    addProduct(
+      nameRef,
+      descRef,
+      sizeRef,
+      skuRef,
+      priceRef,
+      stockRef,
+      discountRef,
+      qualityRef,
+      categoryRef,
+      url
     );
-
-    const uploadedImageUrl = await res.json();
-    const { url } = uploadedImageUrl;
-    console.log(url);
   }
   return (
     <div className="font-[Ubuntu] flex flex-col items-center gap-7 h-screen overflow-scroll ">
@@ -189,6 +173,62 @@ function Form() {
       </section>
     </div>
   );
+}
+
+async function addProduct(
+  nameRef,
+  descRef,
+  sizeRef,
+  skuRef,
+  priceRef,
+  stockRef,
+  discountRef,
+  qualityRef,
+  categoryRef,
+  url
+) {
+  console.log(await url);
+  try {
+    const docRef = await addDoc(collection(firestore, "test_images"), {
+      product_name: nameRef.current.value,
+      description: descRef.current.value,
+      size: sizeRef.current.value,
+      sku: skuRef.current.value || null,
+      price: priceRef.current.value,
+      stock: stockRef.current.value,
+      discount: discountRef.current.value || null,
+      quality: qualityRef.current.value,
+      image: String(url),
+      category: categoryRef.current.value,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getUploadUrl(imageRef) {
+  try {
+    if (!file) return;
+    const file = imageRef.current.files[0];
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "product_images");
+    data.append("cloud_name", "dwuelxoyn");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dwuelxoyn/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const response = await res.json();
+    const { url } = response;
+    console.log("called");
+    console.log(url);
+
+    return url;
+  } catch (error) {}
 }
 
 export default AddProduct;
