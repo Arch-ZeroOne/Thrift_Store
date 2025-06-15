@@ -4,10 +4,14 @@ import Header from "../../components/Header";
 import Overview from "../../components/Overview";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
+import { useLoader } from "../../context/LoaderContext";
+import Spinner from "../../components/Spinner";
 
 function AddProduct() {
+  const { loading } = useLoader();
   return (
     <div className="flex h-screen">
+      {loading && <Spinner />}
       <Sidebar />
       <div className="w-full flex flex-col gap-2">
         <Header />
@@ -30,9 +34,12 @@ function Form() {
   const categoryRef = useRef();
   const imageRef = useRef();
 
+  const { setLoading } = useLoader();
+
   //async since we are gonna perform requests
   async function handleSubmit() {
-    const url = getUploadUrl(imageRef);
+    const url = await getUploadUrl(setLoading, imageRef);
+
     addProduct(
       nameRef,
       descRef,
@@ -43,7 +50,9 @@ function Form() {
       discountRef,
       qualityRef,
       categoryRef,
-      url
+      url,
+      imageRef,
+      setLoading
     );
   }
   return (
@@ -185,9 +194,10 @@ async function addProduct(
   discountRef,
   qualityRef,
   categoryRef,
-  url
+  url,
+  imageRef,
+  setLoading
 ) {
-  console.log(await url);
   try {
     const docRef = await addDoc(collection(firestore, "test_images"), {
       product_name: nameRef.current.value,
@@ -198,18 +208,29 @@ async function addProduct(
       stock: stockRef.current.value,
       discount: discountRef.current.value || null,
       quality: qualityRef.current.value,
-      image: String(url),
+      image: url,
       category: categoryRef.current.value,
+    }).then((result) => {
+      setLoading(false);
+      nameRef.current.value = "";
+      descRef.current.value = "";
+      sizeRef.current.value = "";
+      skuRef.current.value = "";
+      priceRef.current.value = "0";
+      stockRef.current.value = "0";
+      discountRef.current.value = "0";
+      imageRef.current.value = "";
     });
   } catch (error) {
     console.log(error);
   }
 }
 
-async function getUploadUrl(imageRef) {
+async function getUploadUrl(setLoading, imageRef) {
   try {
-    if (!file) return;
+    setLoading(true);
     const file = imageRef.current.files[0];
+    if (!file) return;
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "product_images");
@@ -228,7 +249,10 @@ async function getUploadUrl(imageRef) {
     console.log(url);
 
     return url;
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error in get upload url");
+    console.log(error);
+  }
 }
 
 export default AddProduct;

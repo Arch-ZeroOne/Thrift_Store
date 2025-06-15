@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="font-[Ubuntu] flex flex-col gap-7 w-[25%] bg-[#1E1E24] h-full">
+    <div className="font-[Ubuntu] flex flex-col gap-7 w-[25%] bg-[#1E1E24] h-screen">
       <Name />
       <Links />
     </div>
@@ -41,7 +41,9 @@ function Links() {
               <li>
                 <div className="flex items-center">
                   <i class="fa-solid fa-bars-progress"></i>
-                  <p className="text-[17px]">Manage Product</p>
+                  <NavLink to="/manageProduct">
+                    <p className="text-[17px]">Manage Product</p>
+                  </NavLink>
                 </div>
               </li>
               <li>
