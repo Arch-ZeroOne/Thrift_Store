@@ -1,21 +1,21 @@
 import React, { useRef } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
-import Overview from "../../components/Overview";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";
 import Spinner from "../../components/Spinner";
+import Options from "../../components/Options";
 
 function AddProduct() {
   const { loading } = useLoader();
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen font-[Ubuntu]">
       {loading && <Spinner />}
       <Sidebar />
       <div className="w-full flex flex-col gap-2">
         <Header />
-        <Overview path="Add Product" />
+
         <Form />
       </div>
     </div>
@@ -56,20 +56,19 @@ function Form() {
     );
   }
   return (
-    <div className="font-[Ubuntu] flex flex-col items-center gap-7 h-screen overflow-scroll ">
+    <div className="font-[Poppins] flex flex-col items-center gap-7 h-screen overflow-scroll ">
+      <div className="flex items-center justify-around w-full">
+        <PageTitle />
+        <Button onClick={handleSubmit} />
+      </div>
       <section className="shadow-2xl  flex flex-col gap-3 p-4 w-[70%] rounded-xl border  border-gray-500/50">
-        <div className="flex gap-2 w-full flex-col items-center mr-auto ml-auto">
+        <div className="flex gap-2 w-full flex-col  mr-auto ml-auto">
+          <h1 className="font-bold text-start text-lg">General Information</h1>
           <label className="font-medium">Product Name</label>
-          <input
-            type="text"
-            placeholder="Product Name"
-            className="input input-md"
-            ref={nameRef}
-          />
+          <input type="text" className="input input-md" ref={nameRef} />
           <label className="font-medium">Product Description</label>
           <textarea
-            placeholder="Product Description"
-            className="textarea textarea-neutral"
+            className="border-1 h-30 rounded-xl border-gray-700"
             ref={descRef}
           ></textarea>
         </div>
@@ -78,18 +77,6 @@ function Form() {
         <div className="flex gap-2 justify-around">
           <div className="flex flex-col gap-2 w-full">
             <label className="font-medium">Available Size</label>
-            <select
-              ref={sizeRef}
-              defaultValue="Pick Available Size"
-              className="select"
-            >
-              <option>XL</option>
-              <option>S</option>
-              <option>M</option>
-              <option>XL</option>
-              <option>XXL</option>
-              <option>N/A</option>
-            </select>
           </div>
           <div className="flex flex-col gap-2 w-full">
             <label className="font-medium">SKU(Optional)</label>
@@ -172,13 +159,6 @@ function Form() {
             </select>
           </div>
         </section>
-
-        <button
-          class="btn btn-neutral rounded-xl w-80 cursor-pointer"
-          onClick={() => handleSubmit()}
-        >
-          Submit
-        </button>
       </section>
     </div>
   );
@@ -253,6 +233,31 @@ async function getUploadUrl(setLoading, imageRef) {
     console.log("Error in get upload url");
     console.log(error);
   }
+}
+
+function PageTitle() {
+  return (
+    <section className="self-start">
+      <div className="flex items-center gap-2 p-5">
+        <i class="fa-solid fa-shop text-xl font-bold"></i>
+        <h1 className="text-lg font-bold text-primary">Add Product</h1>
+      </div>
+    </section>
+  );
+}
+
+function Button({ onClick }) {
+  return (
+    <div>
+      <button
+        class="btn btn-primary rounded-xl w-50 cursor-pointer"
+        onClick={onClick}
+      >
+        <i class="fa-solid fa-plus"></i>
+        Add Product
+      </button>
+    </div>
+  );
 }
 
 export default AddProduct;

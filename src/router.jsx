@@ -7,11 +7,15 @@ import ManageProduct from "./views/admin/ManageProduct";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: <Home />,
   },
   {
     path: "/register",
     element: <Registration />,
+  },
+  {
+    path: "/admin",
+    element: <Dashboard />,
   },
   {
     path: "/addProduct",
