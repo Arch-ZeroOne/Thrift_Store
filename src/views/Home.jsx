@@ -3,19 +3,23 @@ import Navbar from "../components/Navbar";
 import Empty from "../assets/svg/empty-cart.svg";
 import { firestore } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
+import Loader from "../components/Loader";
+import { useLoader } from "../context/LoaderContext";
 function Home() {
   const [products, setProducts] = useState();
+  const { loading, setLoading } = useLoader();
 
   useEffect(() => {
-    getProducts(setProducts);
+    getProducts(setProducts, setLoading);
   }, []);
 
   return (
     <div>
       <Navbar />
+      {loading && <Loader />}
 
-      {!products && <EmptyCart />}
-      <section className="grid grid-cols-3 justify-items-center mt-4 gap-3 mb-5">
+      {!products && !loading && <EmptyCart />}
+      <section className="grid grid-cols-3 justify-items-center mt-4 gap-3 mb-5 md:grid-cols-2  lg:grid-cols-3 ">
         {products &&
           products.map((item) => (
             <ProductCard
@@ -59,7 +63,8 @@ function ProductCard({ name, description, image }) {
   );
 }
 
-async function getProducts(setProducts) {
+async function getProducts(setProducts, setLoading) {
+  setLoading(true);
   const snapshot = await getDocs(collection(firestore, "test_images"));
   let query = [];
 
@@ -69,9 +74,8 @@ async function getProducts(setProducts) {
     query.push(data.data());
   });
 
-  console.log(query);
-
   setProducts(query);
+  setLoading(false);
 }
 
 export default Home;

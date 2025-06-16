@@ -6,11 +6,16 @@ import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";
 import Spinner from "../../components/Spinner";
 import Options from "../../components/Options";
+import toast, { Toaster } from "react-hot-toast";
+
+//TODO: Learn Tanstack table and Learn about rule based for admin authentication
 
 function AddProduct() {
   const { loading } = useLoader();
+
   return (
     <div className="flex h-screen font-[Ubuntu]">
+      <Toaster />
       {loading && <Spinner />}
       <Sidebar />
       <div className="w-full flex flex-col gap-2">
@@ -77,6 +82,18 @@ function Form() {
         <div className="flex gap-2 justify-around">
           <div className="flex flex-col gap-2 w-full">
             <label className="font-medium">Available Size</label>
+            <select
+              defaultValue="Available Size"
+              className="select select-success"
+              ref={sizeRef}
+            >
+              <option disabled={true}>Pick a Runtime</option>
+              <option>XL</option>
+              <option>S</option>
+              <option>XS</option>
+              <option>M</option>
+              <option>N/A</option>
+            </select>
           </div>
           <div className="flex flex-col gap-2 w-full">
             <label className="font-medium">SKU(Optional)</label>
@@ -156,6 +173,7 @@ function Form() {
               <option value="personal_care">Personal Care Products</option>
               <option value="cleaning_supplies">Cleaning Supplies</option>
               <option value="decor">Home Decor</option>
+              <option value="food_beverage">Food and Beverages</option>
             </select>
           </div>
         </section>
@@ -178,6 +196,28 @@ async function addProduct(
   imageRef,
   setLoading
 ) {
+  const notifySuccess = () => {
+    toast.success("Product is Successfully Added!");
+  };
+  const notifyEmpty = () => {
+    toast.error("Please fill out empty values");
+  };
+
+  if (
+    !nameRef.current.value ||
+    !descRef.current.value ||
+    !sizeRef.current.value ||
+    !priceRef.current.value ||
+    !stockRef.current.value ||
+    !qualityRef.current.value ||
+    !url ||
+    !categoryRef.current.value
+  ) {
+    notifyEmpty();
+    setLoading(false);
+    return;
+  }
+
   try {
     const docRef = await addDoc(collection(firestore, "test_images"), {
       product_name: nameRef.current.value,
@@ -200,6 +240,7 @@ async function addProduct(
       stockRef.current.value = "0";
       discountRef.current.value = "0";
       imageRef.current.value = "";
+      notifySuccess();
     });
   } catch (error) {
     console.log(error);
