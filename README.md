@@ -1,12 +1,49 @@
-# React + Vite
+# 🛒 React E-Commerce App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern e-commerce web application built using **React** for the frontend, **Firebase** for backend services (authentication, database, and storage), **React Router** for routing, and **DaisyUI** for pre-styled components.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔧 Tech Stack
 
-## Expanding the ESLint configuration
+| Tech        | Description                                      |
+|-------------|--------------------------------------------------|
+| **React**   | JavaScript library for building the user interface |
+| **Firebase**| Backend services - Auth, Firestore, Storage       |
+| **React Router** | Client-side routing                           |
+| **DaisyUI** | UI components built on top of Tailwind CSS       |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Features
+
+- 🔐 **User Authentication**
+  - Sign Up, Login, and Logout
+  - Firebase Auth integration
+
+- 🛍️ **Product Catalog**
+  - Display of products from Firebase Firestore
+  - Product image, name, price, and description
+
+- 🛒 **Shopping Cart**
+  - Add/Remove items to cart
+  - Quantity update and total price calculation
+
+- 📦 **Checkout Process**
+  - Simple checkout form
+  - Order placement logic (optional)
+
+- 🗺️ **Routing**
+  - Homepage
+  - Product Details
+  - Cart Page
+  - Login / Register
+  - Protected Routes (authenticated access)
+
+- 🎨 **Responsive UI**
+  - DaisyUI for consistent design and mobile responsiveness
+
+---
+
+## 📁 Folder Structure (Simplified)
+
