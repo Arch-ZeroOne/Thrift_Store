@@ -6,9 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+thrift-store-36d33-firebase-adminsdk-fbsvc-c7f68d958a.json
 node_modules
 dist
+.env
+ServiceAccountKey.json
 dist-ssr
 *.local
 

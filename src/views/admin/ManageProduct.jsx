@@ -72,7 +72,6 @@ async function getProducts(setProducts, setLoading) {
 
   setLoading(true);
   const querySnapShot = await getDocs(collection(firestore, "test_images"));
-
   querySnapShot.forEach((data) => {
     products.push(data.data());
   });

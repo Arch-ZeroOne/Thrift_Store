@@ -6,15 +6,21 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
 } from "firebase/auth";
+
 import { auth } from "../firebase/config";
 import { useRef } from "react";
 import { ERR0R_CODE } from "../components/Navbar";
+import { useRole } from "../context/RoleContext";
+import createClaims from "../api/Auth";
 
 import Swal from "sweetalert2";
 
 function Registration() {
-  const [isSeller, setIsSeller] = useState(true);
+  const { isSeller, setIsSeller } = useRole();
   const [role, setRole] = useState("");
+  const currentUser = auth.currentUser;
+
+  console.log(isSeller);
 
   useEffect(() => {
     let value = isSeller ? "Seller" : "Buyer";
@@ -22,7 +28,7 @@ function Registration() {
   }, [isSeller]);
 
   return (
-    <div className="flex gap-3 justify-between mt-10 shadow-2xl w-[60%]  ml-auto mr-auto  rounded-lg h-130 items-center font-[Ubuntu]">
+    <div className="flex gap-3 justify-between mt-10 shadow-2xl w-[65%]  ml-auto mr-auto  rounded-lg h-130 items-center font-[Ubuntu]">
       <div className="flex items-center flex-col  gap-5 p-5">
         <div className="flex flex-col gap-3">
           <h2 className="font-bold text-2xl text-center ">
@@ -43,19 +49,19 @@ function Registration() {
         </div>
         <Icons />
         <h3 className="font-medium text-center">Or</h3>
-        <Form />
+        <Form isSeller={isSeller} />
       </div>
       <Illustration />
     </div>
   );
 }
 
-function Form() {
+function Form({ isSeller }) {
   const email_ref = useRef();
   const password_ref = useRef();
 
   function handleRegistration() {
-    register(email_ref.current, password_ref.current);
+    register(email_ref.current, password_ref.current, isSeller);
   }
   return (
     <section className="font-[Ubuntu]  flex flex-col items-center gap-5 ">
@@ -158,8 +164,9 @@ function Icons() {
 }
 
 function IconBox({ name, icon, provider }) {
+  const { isSeller } = useRole();
   function handleSignIn() {
-    signInWithProvider(provider);
+    signInWithProvider(provider, isSeller);
   }
   return (
     <div className="border border-black/30 p-3  font-[Ubuntu] rounded-xl cursor-pointer">
@@ -171,11 +178,13 @@ function IconBox({ name, icon, provider }) {
   );
 }
 
-function register(gmail, password) {
+function register(gmail, password, isSeller) {
   createUserWithEmailAndPassword(auth, gmail.value, password.value)
     .then((credential) => {
       const user = credential.user;
       const { email } = user;
+      //is Seller goes undefined here
+      createClaims(user.uid, isSeller);
       showSuccess(email, gmail, password);
     })
     .catch((error) => {
@@ -221,11 +230,10 @@ function showSuccess(username, emailRef, passwordRef) {
   });
 }
 
-function signInWithProvider(provider) {
+function signInWithProvider(provider, isSeller) {
   signInWithPopup(auth, provider).then((credential) => {
     const user = credential.user;
     const { displayName } = user;
-
     showSuccess(displayName);
   });
 }

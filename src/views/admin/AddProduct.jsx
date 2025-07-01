@@ -5,7 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";
 import Spinner from "../../components/Spinner";
-import Options from "../../components/Options";
+
 import toast, { Toaster } from "react-hot-toast";
 
 //TODO: Learn Tanstack table and Learn about rule based for admin authentication
@@ -73,7 +73,7 @@ function Form() {
           <input type="text" className="input input-md" ref={nameRef} />
           <label className="font-medium">Product Description</label>
           <textarea
-            className="border-1 h-30 rounded-xl border-gray-700"
+            className="border-1 h-30 rounded-xl border-gray-700 p-3"
             ref={descRef}
           ></textarea>
         </div>

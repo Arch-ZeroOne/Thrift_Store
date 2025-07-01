@@ -14,7 +14,7 @@ function Home() {
   }, []);
 
   return (
-    <div>
+    <div className="font-[Poppins]">
       <Navbar />
       {loading && <Loader />}
 
@@ -37,9 +37,7 @@ function EmptyCart() {
   return (
     <div className=" items-center mt-15 flex flex-col gap-4 justify-center">
       <img src={Empty} className="h-80" alt="" />
-      <h2 className="font-bold font-[Ubuntu] text-2xl">
-        Store is Currently Empty
-      </h2>
+      <h2 className="font-bold text-2xl">Store is Currently Empty</h2>
     </div>
   );
 }
@@ -67,8 +65,6 @@ async function getProducts(setProducts, setLoading) {
   setLoading(true);
   const snapshot = await getDocs(collection(firestore, "test_images"));
   let query = [];
-
-  console.log(snapshot);
 
   snapshot.forEach((data) => {
     query.push(data.data());

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Overview from "../../components/Overview";
-
+import { useUser } from "../../context/RoleContext";
+import { useNavigate } from "react-router-dom";
 function Dashboard() {
+  const { currentUser } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    }
+  }, [currentUser]);
   return (
     <div className="flex w-full">
       <Sidebar />

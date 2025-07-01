@@ -1,7 +1,9 @@
 import React from "react";
 import DefaultProfile from "../assets/images/default-profile.png";
-
+import { auth } from "../firebase/config";
+import { useUser } from "../context/RoleContext";
 function Header() {
+  const { setCurrentUser } = useUser();
   return (
     <div className="font-[Ubuntu]">
       <div className="navbar bg-base-100 shadow-xl">
@@ -34,7 +36,14 @@ function Header() {
                 </li>
 
                 <li>
-                  <a>Logout</a>
+                  <a
+                    onClick={() => {
+                      auth.signOut();
+                      setCurrentUser("");
+                    }}
+                  >
+                    Logout
+                  </a>
                 </li>
               </ul>
             </div>

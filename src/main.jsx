@@ -6,10 +6,13 @@ import "./assets/css/output.css";
 import "./assets/css/spinner.css";
 import "./assets/css/options.css";
 import LoaderContext from "./context/LoaderContext";
+import RoleContext from "./context/RoleContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LoaderContext>
-      <RouterProvider router={router} />
-    </LoaderContext>
+    <RoleContext>
+      <LoaderContext>
+        <RouterProvider router={router} />
+      </LoaderContext>
+    </RoleContext>
   </StrictMode>
 );

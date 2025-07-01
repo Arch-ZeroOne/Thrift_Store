@@ -1,5 +1,6 @@
-import React, { use } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/icons/site-logo.png";
+import Default from "/default-profile.png";
 import Swal from "sweetalert2";
 import { NavLink } from "react-router-dom";
 import { auth } from "../firebase/config.js";
@@ -9,9 +10,11 @@ import {
   GithubAuthProvider,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { useRef } from "react";
-import { Code } from "firebase/data-connect";
 
+import { getRole } from "../api/Auth.js";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/RoleContext.jsx";
 //providers for different sign in types
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
@@ -22,13 +25,44 @@ export const ERR0R_CODE = {
 };
 
 function Navbar() {
+  const [seller, setSeller] = useState(false);
+  const { currentUser, setCurrentUser } = useUser(auth.currentUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      const fetchRole = async () => {
+        const role = await getRole(currentUser.accessToken);
+        setSeller(role);
+      };
+      fetchRole();
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (seller) {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [seller, currentUser]);
+
   return (
-    <div className="font-[Ubuntu] flex justify-between p-4 shadow-lg">
+    <div className=" flex justify-between p-4 shadow-lg font-[Poppins]">
       <BrandName />
       <Links />
       <SearchBar />
       <div className="flex gap-10 items-center">
-        <AccountDrawer />
+        {currentUser ? (
+          <UserProfile
+            username={currentUser.email}
+            setCurrentUser={setCurrentUser}
+          />
+        ) : (
+          <AccountDrawer setCurrentUser={setCurrentUser} />
+        )}
         <CartDrawer />
       </div>
     </div>
@@ -37,7 +71,7 @@ function Navbar() {
 
 function BrandName() {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-2">
       <img src={Logo} className="h-10" alt="" />
       <h1 className="font-bold ">UrbanFlick</h1>
     </div>
@@ -62,7 +96,7 @@ function SearchBar() {
 
 function CartDrawer() {
   return (
-    <div className="font-[Ubuntu]">
+    <div>
       <div className="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
@@ -105,7 +139,7 @@ function CartDrawer() {
   );
 }
 
-function AccountDrawer() {
+function AccountDrawer({ setCurrentUser }) {
   const modalRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -120,7 +154,7 @@ function AccountDrawer() {
     modalRef.current.showModal();
   }
   return (
-    <div className="font-[Ubuntu]">
+    <div>
       <button className="btn" onClick={() => showModal()}>
         <i className="fa-solid fa-user text-lg"></i>
       </button>
@@ -160,7 +194,12 @@ function AccountDrawer() {
                 <button
                   className="btn btn-neutral mt-4"
                   onClick={() =>
-                    signIn(emailRef.current, passwordRef.current, modalRef)
+                    signIn(
+                      emailRef.current,
+                      passwordRef.current,
+                      modalRef,
+                      setCurrentUser
+                    )
                   }
                 >
                   Login
@@ -199,6 +238,35 @@ function AccountDrawer() {
   );
 }
 
+function UserProfile({ username, setCurrentUser }) {
+  const handleLogOut = () => {
+    auth.signOut();
+    setCurrentUser("");
+  };
+  return (
+    <div>
+      <>
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn m-1">
+            {username}
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+          >
+            <li>
+              <a>Details</a>
+            </li>
+            <li>
+              <a onClick={() => handleLogOut()}>Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </>
+    </div>
+  );
+}
+
 function ToggleForm(provider, modalRef) {
   signInWithPopup(auth, provider)
     .then((result) => {
@@ -213,19 +281,18 @@ function ToggleForm(provider, modalRef) {
   return null;
 }
 
-function signIn(emailRef, passwordRef, modal) {
+function signIn(emailRef, passwordRef, modal, setCurrentUser) {
   signInWithEmailAndPassword(auth, emailRef.value, passwordRef.value)
     .then((credential) => {
       const user = credential.user;
       const { displayName } = user;
-      showSuccess(displayName);
+      showSuccess(displayName ? displayName : "User");
+      setCurrentUser(credential.user);
       emailRef.value = "";
       passwordRef.value = "";
     })
     .catch((error) => {
-      console.log(error);
       const code = error.code;
-      console.log(code);
 
       switch (code) {
         case ERR0R_CODE.INVALID_EMAIL:
@@ -236,6 +303,8 @@ function signIn(emailRef, passwordRef, modal) {
           break;
       }
     });
+
+  return null;
 }
 
 export function showSuccess(displayName) {
@@ -257,5 +326,4 @@ export function showError(message, modal) {
   });
 }
 
-function closeModal() {}
 export default Navbar;
