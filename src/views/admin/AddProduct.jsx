@@ -8,8 +8,6 @@ import Spinner from "../../components/Spinner";
 
 import toast, { Toaster } from "react-hot-toast";
 
-//TODO: Learn Tanstack table and Learn about rule based for admin authentication
-
 function AddProduct() {
   const { loading } = useLoader();
 
@@ -156,15 +154,17 @@ function Form() {
             />
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 font-[Poppins]">
             <label className="font-medium">Product Category</label>
             <select
               ref={categoryRef}
               defaultValue="Product Category"
-              className="select"
+              className="select "
             >
               <option value="clothing">Clothing</option>
               <option value="footwear">Footwear</option>
+              <option value="electronics">Electronics & Devices</option>
+              <option value="skincare_product">Skincare Product</option>
               <option value="accessories">Accessories</option>
               <option value="home_appliances">Home Appliances</option>
               <option value="furniture">Furniture</option>
@@ -174,6 +174,7 @@ function Form() {
               <option value="cleaning_supplies">Cleaning Supplies</option>
               <option value="decor">Home Decor</option>
               <option value="food_beverage">Food and Beverages</option>
+              <option value="school_supply">School Supplies</option>
             </select>
           </div>
         </section>
@@ -219,7 +220,7 @@ async function addProduct(
   }
 
   try {
-    const docRef = await addDoc(collection(firestore, "test_images"), {
+    const docRef = await addDoc(collection(firestore, "products"), {
       product_name: nameRef.current.value,
       description: descRef.current.value,
       size: sizeRef.current.value,
@@ -230,7 +231,7 @@ async function addProduct(
       quality: qualityRef.current.value,
       image: url,
       category: categoryRef.current.value,
-    }).then((result) => {
+    }).then(() => {
       setLoading(false);
       nameRef.current.value = "";
       descRef.current.value = "";
@@ -266,8 +267,6 @@ async function getUploadUrl(setLoading, imageRef) {
     );
     const response = await res.json();
     const { url } = response;
-    console.log("called");
-    console.log(url);
 
     return url;
   } catch (error) {

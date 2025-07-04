@@ -7,12 +7,15 @@ import "./assets/css/spinner.css";
 import "./assets/css/options.css";
 import LoaderContext from "./context/LoaderContext";
 import RoleContext from "./context/RoleContext";
+import CartContext from "./context/CartContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RoleContext>
-      <LoaderContext>
-        <RouterProvider router={router} />
-      </LoaderContext>
-    </RoleContext>
+    <CartContext>
+      <RoleContext>
+        <LoaderContext>
+          <RouterProvider router={router} />
+        </LoaderContext>
+      </RoleContext>
+    </CartContext>
   </StrictMode>
 );

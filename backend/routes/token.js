@@ -41,7 +41,6 @@ router.post("/getRole", (req, res) => {
       .auth()
       .verifyIdToken(idToken)
       .then((claims) => {
-        console.log(claims.isSeller);
         res.json({ seller: claims.isSeller });
       });
   }

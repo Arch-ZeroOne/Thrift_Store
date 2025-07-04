@@ -13,6 +13,7 @@ export function useUser() {
 function RoleContext({ children }) {
   const [isSeller, setIsSeller] = useState(true);
   const [currentUser, setCurrentUser] = useState();
+
   return (
     <>
       <UserContext value={{ currentUser, setCurrentUser }}>

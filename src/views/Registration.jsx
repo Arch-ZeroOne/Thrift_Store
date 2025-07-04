@@ -10,17 +10,13 @@ import {
 import { auth } from "../firebase/config";
 import { useRef } from "react";
 import { ERR0R_CODE } from "../components/Navbar";
-import { useRole } from "../context/RoleContext";
+import { useRole, useUser } from "../context/RoleContext";
 import createClaims from "../api/Auth";
-
 import Swal from "sweetalert2";
 
 function Registration() {
   const { isSeller, setIsSeller } = useRole();
   const [role, setRole] = useState("");
-  const currentUser = auth.currentUser;
-
-  console.log(isSeller);
 
   useEffect(() => {
     let value = isSeller ? "Seller" : "Buyer";
@@ -202,6 +198,20 @@ function register(gmail, password, isSeller) {
     });
 }
 
+function signInWithProvider(provider, isSeller) {
+  signInWithPopup(auth, provider)
+    .then((credential) => {
+      const user = credential.user;
+      const { displayName } = user;
+      createClaims(user.uid, isSeller);
+      showSuccess(displayName);
+    })
+    .catch((error) => {
+      const code = error.code;
+      console.log(error.code);
+    });
+}
+
 function showSuccess(username, emailRef, passwordRef) {
   let timerInterval;
   Swal.fire({
@@ -227,14 +237,6 @@ function showSuccess(username, emailRef, passwordRef) {
         passwordRef.value = "";
       }
     }
-  });
-}
-
-function signInWithProvider(provider, isSeller) {
-  signInWithPopup(auth, provider).then((credential) => {
-    const user = credential.user;
-    const { displayName } = user;
-    showSuccess(displayName);
   });
 }
 

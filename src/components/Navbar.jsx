@@ -209,7 +209,9 @@ function AccountDrawer({ setCurrentUser }) {
             <div className="flex items-center gap-3 justify-center cursor-pointer">
               <div
                 className="flex items-center gap-2"
-                onClick={() => ToggleForm(google_provider, modalRef)}
+                onClick={() =>
+                  ToggleForm(google_provider, modalRef, setCurrentUser)
+                }
               >
                 <i className="fa-brands fa-google text-xl"></i>
                 <p className="font-bold">Google</p>
@@ -217,7 +219,9 @@ function AccountDrawer({ setCurrentUser }) {
 
               <div
                 className="flex items-center gap-2"
-                onClick={() => ToggleForm(github_provider, modalRef)}
+                onClick={() =>
+                  ToggleForm(github_provider, modalRef, setCurrentUser)
+                }
               >
                 <i className="fa-brands fa-github text-xl"></i>
                 <p className="font-bold">Github</p>
@@ -238,40 +242,12 @@ function AccountDrawer({ setCurrentUser }) {
   );
 }
 
-function UserProfile({ username, setCurrentUser }) {
-  const handleLogOut = () => {
-    auth.signOut();
-    setCurrentUser("");
-  };
-  return (
-    <div>
-      <>
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn m-1">
-            {username}
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-          >
-            <li>
-              <a>Details</a>
-            </li>
-            <li>
-              <a onClick={() => handleLogOut()}>Log Out</a>
-            </li>
-          </ul>
-        </div>
-      </>
-    </div>
-  );
-}
-
-function ToggleForm(provider, modalRef) {
+function ToggleForm(provider, modalRef, setCurrentUser) {
   signInWithPopup(auth, provider)
-    .then((result) => {
-      const user = result.user;
+    .then((credential) => {
+      const user = credential.user;
       const { displayName } = user;
+      setCurrentUser(credential.user);
       modalRef.current.close();
       showSuccess(displayName);
     })
@@ -305,6 +281,35 @@ function signIn(emailRef, passwordRef, modal, setCurrentUser) {
     });
 
   return null;
+}
+
+function UserProfile({ username, setCurrentUser }) {
+  const handleLogOut = () => {
+    auth.signOut();
+    setCurrentUser("");
+  };
+  return (
+    <div>
+      <>
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn m-1">
+            {username}
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+          >
+            <li>
+              <a>Details</a>
+            </li>
+            <li>
+              <a onClick={() => handleLogOut()}>Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </>
+    </div>
+  );
 }
 
 export function showSuccess(displayName) {
