@@ -10,11 +10,12 @@ import {
   GithubAuthProvider,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-
+import { getAllCart } from "../firebase/products.js";
 import { getRole } from "../api/Auth.js";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/RoleContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 //providers for different sign in types
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
@@ -26,7 +27,7 @@ export const ERR0R_CODE = {
 
 function Navbar() {
   const [seller, setSeller] = useState(false);
-  const { currentUser, setCurrentUser } = useUser(auth.currentUser);
+  const { currentUser, setCurrentUser } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,6 +96,10 @@ function SearchBar() {
 }
 
 function CartDrawer() {
+  //need to find a way for the carts
+
+  const { cart, setCart } = useCart();
+
   return (
     <div>
       <div className="drawer drawer-end">
@@ -121,7 +126,13 @@ function CartDrawer() {
           >
             <div className="flex flex-col gap-3 ">
               <h1 className="font-bold text-2xl text-center">My Cart</h1>
-              <h2 className="font-normal text-xl ml-3">Cart is Empty</h2>
+              {!cart ? (
+                <h2 className="font-normal text-xl ml-3">Cart is Empty</h2>
+              ) : (
+                cart.map((data) => (
+                  <CartItem productName={data.productName} image={data.image} />
+                ))
+              )}
             </div>
             <div className="flex flex-col items-center gap-3">
               <div className="flex items-center  justify-around w-full">
@@ -308,6 +319,36 @@ function UserProfile({ username, setCurrentUser }) {
           </ul>
         </div>
       </>
+    </div>
+  );
+}
+
+function CartItem({ image, productName }) {
+  return (
+    <div>
+      <ul className="list bg-base-100 rounded-box shadow-md">
+        <li className="list-row">
+          <section className="flex justify-center gap-5">
+            <div>
+              <img className="size-10 rounded-box" src={image} />
+            </div>
+            <div>
+              <div className="text-xl">{productName}</div>
+            </div>
+          </section>
+          <div className="flex justify-center">
+            <button className="btn btn-square btn-ghost">
+              <i class="fa-solid fa-trash text-xl" title="Remove Item"></i>
+            </button>
+            <button className="btn btn-square btn-ghost">
+              <i
+                class="fa-solid fa-money-check-dollar text-xl"
+                title="Check Out"
+              ></i>
+            </button>
+          </div>
+        </li>
+      </ul>
     </div>
   );
 }

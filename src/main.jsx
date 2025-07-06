@@ -8,14 +8,15 @@ import "./assets/css/options.css";
 import LoaderContext from "./context/LoaderContext";
 import RoleContext from "./context/RoleContext";
 import CartContext from "./context/CartContext";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <CartContext>
-      <RoleContext>
-        <LoaderContext>
+      <LoaderContext>
+        <RoleContext>
           <RouterProvider router={router} />
-        </LoaderContext>
-      </RoleContext>
+        </RoleContext>
+      </LoaderContext>
     </CartContext>
   </StrictMode>
 );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Empty from "../assets/svg/empty-cart.svg";
 import Loader from "../components/Loader";
+import Spinner from "../components/Spinner";
 import { firestore } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import { addToCart, isExisting } from "../firebase/products";
@@ -9,27 +10,42 @@ import { useLoader } from "../context/LoaderContext";
 import { auth } from "../firebase/config";
 import { useUser } from "../context/RoleContext";
 import { useCart } from "../context/CartContext";
+import { useSpinner } from "../context/LoaderContext";
+import { getAllCart } from "../firebase/products";
 import toast, { Toaster } from "react-hot-toast";
 
 function Home() {
   //state for loading and products list
   const [products, setProducts] = useState();
   const { loading, setLoading } = useLoader();
-  //! State duplication happens in this component
-  const { currentUser } = useUser(auth.currentUser);
   //* Handles and saves the current cart
   const { cart, setCart } = useCart();
+  //* Holds the current user based on AUTH
+  const { currentUser } = useUser();
+  const { spinning } = useSpinner();
 
-  //! Also triggers in other components
+  //TODO : Fix Cart Undefined Problem , Fix adding mechanism
+
   useEffect(() => {
-    if (cart.length != 0) {
+    console.log(cart);
+    if (cart && currentUser) {
       const user = auth.currentUser;
       addToCart(user.uid, cart);
     }
   }, [cart]);
 
+  useEffect(() => {
+    if (currentUser) {
+      const retreiveOld = async () => {
+        const data = await getAllCart(currentUser.uid);
+        setCart(data);
+      };
+      retreiveOld();
+    }
+  }, [currentUser]);
+
   //TODO: Currently Working on Add To Cart
-  const handleCart = (name, price) => {
+  const handleCart = (name, price, image) => {
     if (!currentUser) {
       toast.error("Please Log In First!");
       return;
@@ -38,6 +54,7 @@ function Home() {
     const productDetails = {
       productName: name,
       price: price,
+      image: image,
     };
 
     setCart(() => {
@@ -73,7 +90,9 @@ function Home() {
     <div className="font-[Poppins]">
       <Toaster />
       <Navbar />
+
       {loading && <Loader />}
+      {spinning && <Spinner />}
 
       {!products && !loading && <EmptyCart />}
       <section className="p-2 grid grid-cols-2 justify-items-center mt-4 gap-8 mb-5 md:grid-cols-2  lg:grid-cols-3 ">
@@ -119,7 +138,7 @@ function ProductCard({ name, description, image, price, onClick }) {
               <button className="btn btn-primary ">Buy Now</button>
               <button
                 className="btn btn-neutral"
-                onClick={() => onClick(name, price)}
+                onClick={() => onClick(name, price, image)}
               >
                 Add To Cart
               </button>
@@ -132,6 +151,7 @@ function ProductCard({ name, description, image, price, onClick }) {
 }
 
 async function getProducts(setProducts, setLoading) {
+  //sets the loading state
   setLoading(true);
   const snapshot = await getDocs(collection(firestore, "products"));
   let query = [];
@@ -139,6 +159,7 @@ async function getProducts(setProducts, setLoading) {
     query.push(data.data());
   });
 
+  //sets the state and stops the loadingx
   setProducts(query);
   setLoading(false);
 }

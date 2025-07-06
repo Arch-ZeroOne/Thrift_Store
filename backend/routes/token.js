@@ -3,7 +3,6 @@ const router = express.Router();
 
 var admin = require("firebase-admin");
 var serviceAccount = require("../ServiceAccountKey.json");
-var getAuth = require("firebase-admin");
 
 //provides mechanism for creating token
 //It expires in 1 hour
@@ -18,6 +17,7 @@ admin.initializeApp({
 //additional claims to the custom token
 //will be available in my auth object security rules
 
+//*Route that handles the adding of claims
 router.post("/", (req, res) => {
   if (req.body.id) {
     const additionalClaims = {
@@ -27,13 +27,13 @@ router.post("/", (req, res) => {
     admin
       .auth()
       .setCustomUserClaims(req.body.id, additionalClaims)
-      .then(() => {})
       .catch((error) => {
         console.log("Error creating custom tokens", error);
       });
   }
 });
 
+//* Gets the current role
 router.post("/getRole", (req, res) => {
   const idToken = req.body.token;
   if (idToken) {

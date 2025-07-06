@@ -57,3 +57,20 @@ export function isExisting(cart, currentProduct) {
     };
   }
 }
+export async function getAllCart(user_id) {
+  try {
+    let items = [];
+
+    const querySnapshot = await getDocs(collection(firestore, "cart"));
+
+    querySnapshot.forEach((doc) => {
+      items = doc.data().currentCart;
+    });
+
+    if (items.length != 0) {
+      return items;
+    }
+  } catch (error) {
+    console.log("Error in add to cart:", error);
+  }
+}

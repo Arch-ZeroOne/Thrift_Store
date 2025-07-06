@@ -13,6 +13,7 @@ function Dashboard() {
       navigate("/");
     }
   }, [currentUser]);
+
   return (
     <div className="flex w-full">
       <Sidebar />
