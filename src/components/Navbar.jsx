@@ -295,8 +295,11 @@ function signIn(emailRef, passwordRef, modal, setCurrentUser) {
 }
 
 function UserProfile({ username, setCurrentUser }) {
+  const { setCart } = useCart();
   const handleLogOut = () => {
+    //clears the state of cart and signs out user
     auth.signOut();
+    setCart([]);
     setCurrentUser("");
   };
   return (

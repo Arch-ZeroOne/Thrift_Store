@@ -25,9 +25,9 @@ function Home() {
   const { spinning } = useSpinner();
 
   //TODO : Fix Cart Undefined Problem , Fix adding mechanism
+  //TODO: Currently Working on Add To Cart
 
   useEffect(() => {
-    console.log(cart);
     if (cart && currentUser) {
       const user = auth.currentUser;
       addToCart(user.uid, cart);
@@ -36,15 +36,17 @@ function Home() {
 
   useEffect(() => {
     if (currentUser) {
+      //retrieves old saved cart data of user from firebase
       const retreiveOld = async () => {
         const data = await getAllCart(currentUser.uid);
-        setCart(data);
+        if (data) {
+          setCart(data);
+        }
       };
       retreiveOld();
     }
   }, [currentUser]);
 
-  //TODO: Currently Working on Add To Cart
   const handleCart = (name, price, image) => {
     if (!currentUser) {
       toast.error("Please Log In First!");
