@@ -4,6 +4,7 @@ import Dashboard from "./views/admin/Dashboard";
 import Registration from "./views/Registration";
 import AddProduct from "./views/admin/AddProduct";
 import ManageProduct from "./views/admin/ManageProduct";
+import ProductInfo from "./views/ProductInfo";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/manageProduct",
     element: <ManageProduct />,
+  },
+  {
+    path: "/productinfo/:id",
+    element: <ProductInfo />,
   },
 ]);
 

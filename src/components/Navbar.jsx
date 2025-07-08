@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Logo from "../assets/icons/site-logo.png";
-import Default from "/default-profile.png";
 import Swal from "sweetalert2";
+import DefaultProfile from "/default-profile.png";
 import { NavLink } from "react-router-dom";
 import { auth } from "../firebase/config.js";
 import {
@@ -10,12 +10,14 @@ import {
   GithubAuthProvider,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { getAllCart } from "../firebase/products.js";
+
 import { getRole } from "../api/Auth.js";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/RoleContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
+import { useLoader } from "../context/LoaderContext.jsx";
+
 //providers for different sign in types
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
@@ -28,9 +30,12 @@ export const ERR0R_CODE = {
 function Navbar() {
   const [seller, setSeller] = useState(false);
   const { currentUser, setCurrentUser } = useUser();
+  const { loading, setLoading } = useLoader();
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    //*gets if the user is an admin or a user
     if (currentUser) {
       const fetchRole = async () => {
         const role = await getRole(currentUser.accessToken);
@@ -60,10 +65,12 @@ function Navbar() {
           <UserProfile
             username={currentUser.email}
             setCurrentUser={setCurrentUser}
+            setLoading={setLoading}
           />
         ) : (
-          <AccountDrawer setCurrentUser={setCurrentUser} />
+          <AccountDrawer setLoading={setLoading} loading={loading} />
         )}
+
         <CartDrawer />
       </div>
     </div>
@@ -96,9 +103,18 @@ function SearchBar() {
 }
 
 function CartDrawer() {
-  //need to find a way for the carts
+  const { cart } = useCart();
+  const [total, setTotal] = useState(0);
 
-  const { cart, setCart } = useCart();
+  useEffect(() => {
+    if (cart.length != 0) {
+      const total = cart.reduce((total, current) => {
+        return (total += Number(current.price));
+      }, 0);
+
+      setTotal(total);
+    }
+  }, [cart]);
 
   return (
     <div>
@@ -126,18 +142,22 @@ function CartDrawer() {
           >
             <div className="flex flex-col gap-3 ">
               <h1 className="font-bold text-2xl text-center">My Cart</h1>
-              {!cart ? (
+              {cart.length == 0 ? (
                 <h2 className="font-normal text-xl ml-3">Cart is Empty</h2>
               ) : (
                 cart.map((data) => (
-                  <CartItem productName={data.productName} image={data.image} />
+                  <CartItem
+                    productName={data.productName}
+                    image={data.image}
+                    quantity={data.quantity}
+                  />
                 ))
               )}
             </div>
             <div className="flex flex-col items-center gap-3">
               <div className="flex items-center  justify-around w-full">
-                <p className="text-xl">Total</p>
-                <p className="text-xl">$0:00</p>
+                <p className="text-xl font-bold">Total</p>
+                <p className="text-xl font-medium text-green-500">${total}</p>
               </div>
               <button className="btn btn-dash btn-primary w-40">
                 Checkout
@@ -150,10 +170,11 @@ function CartDrawer() {
   );
 }
 
-function AccountDrawer({ setCurrentUser }) {
+function AccountDrawer({ setLoading, loading }) {
   const modalRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const { currentUser, setCurrentUser } = useUser();
 
   function closeModal() {
     modalRef.current.close();
@@ -164,6 +185,7 @@ function AccountDrawer({ setCurrentUser }) {
   function showModal() {
     modalRef.current.showModal();
   }
+
   return (
     <div>
       <button className="btn" onClick={() => showModal()}>
@@ -204,16 +226,22 @@ function AccountDrawer({ setCurrentUser }) {
 
                 <button
                   className="btn btn-neutral mt-4"
-                  onClick={() =>
+                  onClick={() => {
+                    setLoading(true);
                     signIn(
                       emailRef.current,
                       passwordRef.current,
                       modalRef,
-                      setCurrentUser
-                    )
-                  }
+                      setCurrentUser,
+                      setLoading
+                    );
+                  }}
                 >
-                  Login
+                  {loading ? (
+                    <span className="loading loading-spinner loading-lg"></span>
+                  ) : (
+                    "Login"
+                  )}
                 </button>
               </fieldset>
             </div>
@@ -261,6 +289,7 @@ function ToggleForm(provider, modalRef, setCurrentUser) {
       setCurrentUser(credential.user);
       modalRef.current.close();
       showSuccess(displayName);
+      return;
     })
     .catch((error) => {
       console.log(error);
@@ -268,11 +297,12 @@ function ToggleForm(provider, modalRef, setCurrentUser) {
   return null;
 }
 
-function signIn(emailRef, passwordRef, modal, setCurrentUser) {
+function signIn(emailRef, passwordRef, modal, setCurrentUser, setLoading) {
   signInWithEmailAndPassword(auth, emailRef.value, passwordRef.value)
     .then((credential) => {
       const user = credential.user;
       const { displayName } = user;
+      setLoading(false);
       showSuccess(displayName ? displayName : "User");
       setCurrentUser(credential.user);
       emailRef.value = "";
@@ -294,9 +324,15 @@ function signIn(emailRef, passwordRef, modal, setCurrentUser) {
   return null;
 }
 
-function UserProfile({ username, setCurrentUser }) {
+function UserProfile({ username, setCurrentUser, setLoading }) {
   const { setCart } = useCart();
+
   const handleLogOut = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
     //clears the state of cart and signs out user
     auth.signOut();
     setCart([]);
@@ -304,32 +340,29 @@ function UserProfile({ username, setCurrentUser }) {
   };
   return (
     <div>
-      <>
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn m-1">
-            {username}
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-          >
-            <li>
-              <a>Details</a>
-            </li>
-            <li>
-              <a onClick={() => handleLogOut()}>Log Out</a>
-            </li>
-          </ul>
+      <div className="dropdown ">
+        <div tabIndex={0} className="roundex-xl focus:outline-0">
+          <img className="h-12" src={DefaultProfile}></img>
         </div>
-      </>
+        <ul
+          tabIndex={0}
+          className="dropdown-content menu bg-base-100 rounded-box z-1 w-90 p-2 shadow-sm focus:outline-0 "
+        >
+          <li className="w-full">
+            <a onClick={() => handleLogOut()} className="w-full ">
+              Log Out
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
 
-function CartItem({ image, productName }) {
+function CartItem({ image, productName, quantity }) {
   return (
     <div>
-      <ul className="list bg-base-100 rounded-box shadow-md">
+      <ul className="list bg-base-100 rounded-box shadow-md mb-2">
         <li className="list-row">
           <section className="flex justify-center gap-5">
             <div>
@@ -350,9 +383,29 @@ function CartItem({ image, productName }) {
               ></i>
             </button>
           </div>
+          <div className="flex items-center w-[80%]">
+            <QuantityBtn role="add" />
+            {quantity}
+            <QuantityBtn role="deduct" />
+          </div>
         </li>
       </ul>
     </div>
+  );
+}
+
+function QuantityBtn({ role }) {
+  return (
+    <button
+      className="group cursor-pointer outline-none hover:rotate-90 duration-300 focus:outline-none border-0 "
+      title="Add New"
+    >
+      {role == "add" ? (
+        <i class="fa-solid fa-plus focus:outline-0 hover:outline:0"></i>
+      ) : (
+        <i class="fa-solid fa-minus"></i>
+      )}
+    </button>
   );
 }
 

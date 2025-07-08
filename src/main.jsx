@@ -8,6 +8,7 @@ import "./assets/css/options.css";
 import LoaderContext from "./context/LoaderContext";
 import RoleContext from "./context/RoleContext";
 import CartContext from "./context/CartContext";
+import Navbar from "./components/Navbar";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

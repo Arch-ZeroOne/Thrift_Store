@@ -2,6 +2,7 @@ import { firestore } from "../firebase/config";
 import {
   setDoc,
   getDocs,
+  getDoc,
   doc,
   collection,
   query,
@@ -34,13 +35,15 @@ export async function addToCart(id, items) {
 }
 
 export function isExisting(cart, currentProduct) {
-  let total = 0;
+  let total = 0,
+    quantity = 0;
   let isCompressed = false;
   let existing = false;
 
   cart.map((item) => {
     if (item.productName === currentProduct.productName && !isCompressed) {
       total = Number(item.price) + Number(currentProduct.price);
+      quantity = item.quantity + 1;
       // console.log(
       //   `${Number(item.price)} + ${Number(currentProduct.price)} = ${total}`
       // );
@@ -53,6 +56,7 @@ export function isExisting(cart, currentProduct) {
     return {
       productName: currentProduct.productName,
       price: total,
+      quantity: quantity,
       prevprice: currentProduct.price,
     };
   }
@@ -72,5 +76,14 @@ export async function getAllCart(user_id) {
     }
   } catch (error) {
     console.log("Error in add to cart:", error);
+  }
+}
+
+export async function getProduct(id) {
+  const docRef = doc(firestore, "products", id);
+  const docsnap = await getDoc(docRef);
+
+  if (docsnap.exists()) {
+    return docsnap.data();
   }
 }
