@@ -49,8 +49,6 @@ function Navbar() {
     if (currentUser) {
       if (seller) {
         navigate("/dashboard");
-      } else {
-        navigate("/");
       }
     }
   }, [seller, currentUser]);
