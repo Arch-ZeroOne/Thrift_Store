@@ -44,9 +44,7 @@ export function isExisting(cart, currentProduct) {
     if (item.productName === currentProduct.productName && !isCompressed) {
       total = Number(item.price) + Number(currentProduct.price);
       quantity = item.quantity + 1;
-      // console.log(
-      //   `${Number(item.price)} + ${Number(currentProduct.price)} = ${total}`
-      // );
+
       existing = true;
       isCompressed = true;
     }
@@ -86,4 +84,21 @@ export async function getProduct(id) {
   if (docsnap.exists()) {
     return docsnap.data();
   }
+}
+
+// Will be revised for now it gets all the products
+export async function getTrending() {
+  try {
+    let items = [];
+
+    const querySnapshot = await getDocs(collection(firestore, "products"));
+
+    querySnapshot.forEach((doc) => {
+      items.push(doc.data());
+    });
+
+    if (items.length != 0) {
+      return items;
+    }
+  } catch (error) {}
 }

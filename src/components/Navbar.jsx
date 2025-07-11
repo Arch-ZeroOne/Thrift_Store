@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../assets/icons/site-logo.png";
 import Swal from "sweetalert2";
 import DefaultProfile from "/default-profile.png";
@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/RoleContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { useLoader } from "../context/LoaderContext.jsx";
-
+import { Link } from "react-router-dom";
 //providers for different sign in types
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
@@ -54,7 +54,7 @@ function Navbar() {
   }, [seller, currentUser]);
 
   return (
-    <div className=" flex justify-between p-4 shadow-lg font-[Poppins]">
+    <div className="flex items-center justify-between p-2 shadow-lg font-[Poppins] w-[90%] ml-auto mr-auto mt-8 rounded-xl border border-gray-500/40">
       <BrandName />
       <Links />
       <SearchBar />
@@ -85,11 +85,13 @@ function BrandName() {
 }
 function Links() {
   return (
-    <div className="list-none flex items-center gap-9 font-medium cursor-pointer">
-      <li>Home</li>
-      <li>T-Shirts</li>
-      <li>Pants</li>
-      <li>Shoes</li>
+    <div className="list-none flex items-center gap-9 font-bold cursor-pointer text-sm font-[Montserrat] ">
+      <li className="hover:underline underline-offset-8 hover:opacity-55">
+        <Link to="/">Home</Link>
+      </li>
+      <li className="hover:underline underline-offset-8 hover:opacity-50">
+        <Link to="/allProduct">All Products</Link>
+      </li>
     </div>
   );
 }

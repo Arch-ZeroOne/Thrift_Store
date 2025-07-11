@@ -161,21 +161,10 @@ function Form() {
               defaultValue="Product Category"
               className="select "
             >
-              <option value="clothing">Clothing</option>
-              <option value="footwear">Footwear</option>
-              <option value="electronics">Electronics & Devices</option>
-              <option value="skincare_product">Skincare Product</option>
-              <option value="accessories">Accessories</option>
-              <option value="home_appliances">Home Appliances</option>
-              <option value="furniture">Furniture</option>
-              <option value="kitchenware">Kitchenware</option>
-              <option value="bedding">Bedding & Linens</option>
-              <option value="personal_care">Personal Care Products</option>
-              <option value="cleaning_supplies">Cleaning Supplies</option>
-              <option value="decor">Home Decor</option>
-              <option value="food_beverage">Food and Beverages</option>
-              <option value="school_supply">School Supplies</option>
-              <option value="school_supply">Sports Gear</option>
+              <option>Fashion</option>
+              <option>Electronics</option>
+              <option>Home and Kitchen</option>
+              <option>Automotive</option>
             </select>
           </div>
         </section>

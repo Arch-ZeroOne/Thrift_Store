@@ -1,100 +1,190 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Logo from "/hero-logo.svg";
 import Navbar from "../components/Navbar";
-import Empty from "../assets/svg/empty-cart.svg";
-import Loader from "../components/Loader";
-import Spinner from "../components/Spinner";
+import { getTrending } from "../firebase/products";
 import { Link } from "react-router-dom";
-import { firestore } from "../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
-import { useLoader } from "../context/LoaderContext";
-import { useSpinner } from "../context/LoaderContext";
 import { motion } from "motion/react";
 
 function Home() {
-  //state for loading and products list
-  const [products, setProducts] = useState();
-  const { loading, setLoading } = useLoader();
-
-  const { spinning } = useSpinner();
-
-  //TODO : Fix Cart Undefined Problem , Fix adding mechanism
-  //TODO: Currently Working on Add To Cart
-
-  useEffect(() => {
-    getProducts(setProducts, setLoading);
-  }, []);
-
   return (
-    <div className="font-[Poppins]">
+    <>
       <Navbar />
+      <div className="font-[Ubuntu] flex flex-col gap-5">
+        <section className=" flex mt-17 w-[90%] ml-auto mr-auto mb-20">
+          <di v className="flex flex-col gap-5">
+            <Hero />
+            <Buttons />
+          </di>
 
-      {loading && <Loader />}
-      {spinning && <Spinner />}
+          <div className="w-300">
+            <img src={Logo}></img>
+          </div>
+        </section>
 
-      {!products && !loading && <EmptyCart />}
-      <section className="p-2 grid grid-cols-2 justify-items-center mt-4 gap-1 mb-5 md:grid-cols-3  lg:grid-cols-4 w-full">
-        {products &&
-          products.map((item) => (
-            <Link to={`productinfo/${item.prodId}`} className="w-full">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ProductCard
-                  name={item.product_name}
-                  description={item.description}
-                  image={item.image}
-                  price={item.price}
-                />
-              </motion.button>
-            </Link>
-          ))}
-      </section>
+        <Categories />
+        <TrendingProducts />
+      </div>
+    </>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="flex flex-col gap-5 w-[90%] font-[Montserrat] ">
+      <h1 className="font-bold text-5xl/16">
+        Start<span className="text-success"> Buying</span> and
+        <span className="text-primary"> Selling</span> Smarter — All in One
+        Place
+      </h1>
+      <div>
+        <p className="indent-3 font-medium">
+          Buy. Sell. Grow. All in One Place. Discover a seamless platform where
+          you can shop the best deals or launch your own store with ease.
+          Whether you're a smart buyer or an ambitious seller, you're in the
+          right place.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function Buttons() {
+  return (
+    <div className="flex items-center gap-6">
+      <button className="btn btn-outline btn-primary">
+        <i class="fa-solid fa-arrow-right-long"></i>
+        Get Started
+      </button>
+      <button className="btn btn-outline btn-secondary">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>Learn More
+      </button>
     </div>
   );
 }
 
-function EmptyCart() {
+function Categories() {
+  const categories = [
+    {
+      name: "Fashion",
+      description:
+        "Explore the latest trends in clothing, shoes, and accessories for men, women, and kids. Dress in style for every season and occasion.",
+      icon: "fa-solid fa-shirt ",
+    },
+    {
+      name: "Electronics",
+      description:
+        "Discover a wide range of electronics including smartphones, laptops, audio devices, and gadgets to keep you connected and entertained.",
+      icon: "fa-solid fa-laptop-medical",
+    },
+    {
+      name: "Home And Kitchen",
+      description:
+        "Upgrade your living space with stylish furniture, smart appliances, kitchen tools, and home décor essentials designed for comfort and convenience.",
+      icon: "fa-solid fa-faucet-drip",
+    },
+    {
+      name: "Automotive",
+      description:
+        "Shop car accessories, tools, and parts to keep your vehicle running smoothly and looking great. Find products for maintenance, upgrades, and safety.",
+      icon: "fa-solid fa-screwdriver-wrench",
+    },
+  ];
   return (
-    <div className=" items-center mt-15 flex flex-col gap-4 justify-center">
-      <img src={Empty} className="h-80" alt="" />
-      <h2 className="font-bold text-2xl">Store is Currently Empty</h2>
-    </div>
-  );
-}
-
-function ProductCard({ name, description, image, price }) {
-  return (
-    <div className="card bg-base-100 h-100 w-[90%] shadow-sm mb-7 cursor-pointer">
-      <figure>
-        <img src={image} className="h-80 w-full" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{name}</h2>
-        <p>{description}</p>
-        <div className="card-actions justify-end">
-          <p className="text-green-600 self-end font-bold text-xl">${price}</p>
-        </div>
+    <div className="w-[90%] ml-auto mr-auto mb-15 flex flex-col gap-4">
+      <h3 className="text-2xl font-bold"> Available Categories:</h3>
+      <div className="flex items-center gap-4">
+        {categories.map((data) => (
+          <CategoryCard
+            name={data.name}
+            description={data.description}
+            icon={data.icon}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-async function getProducts(setProducts, setLoading) {
-  //sets the loading state
-  setLoading(true);
-  const snapshot = await getDocs(collection(firestore, "products"));
-  let query = [];
-  snapshot.forEach((data) => {
-    const products = data.data();
-    products.prodId = data.id;
+function CategoryCard({ name, description, icon }) {
+  return (
+    <section className="card bg-primary text-primary-content w-80 h-50 cursor-pointer">
+      <div className="card-body">
+        <h2 className="card-title">
+          <i className={icon}></i>
+          {name}
+        </h2>
+        <p>{description}</p>
+      </div>
+    </section>
+  );
+}
 
-    query.push(products);
-  });
+function TrendingProducts() {
+  const [trending, setTrending] = useState();
 
-  //sets the state and stops the loadingx
-  setProducts(query);
-  setLoading(false);
+  useEffect(() => {
+    const fetchTrending = async () => {
+      const trendingProd = await getTrending();
+      setTrending(trendingProd);
+    };
+
+    fetchTrending();
+  }, []);
+
+  return (
+    <section>
+      <div className=" flex items-center mr-auto ml-auto w-[90%]">
+        <div className="w-full flex  flex-col ">
+          <h2 className="text-3xl font-bold ">Trending Products</h2>
+          <p>Explore Our Trending Products</p>
+        </div>
+        <button className="btn btn-neutral btn-outline">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <Link to="/allProduct">View All Products</Link>
+        </button>
+      </div>
+      <div className="grid grid-cols-4 gap-8 p-2 w-[95%] mr-auto ml-auto mb-10">
+        {trending &&
+          trending.map((data) => (
+            <>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onHoverStart={() => console.log("hover started!")}
+              >
+                <TrendingCard
+                  name={data.product_name}
+                  description={data.description}
+                  image={data.image}
+                  price={data.price}
+                />
+              </motion.button>
+            </>
+          ))}
+      </div>
+    </section>
+  );
+}
+
+function TrendingCard({ name, description, image, price }) {
+  return (
+    <section>
+      <div className="card bg-base-100 w-70 shadow-sm h-100 cursor-pointer">
+        <figure className="px-10 pt-10">
+          <img src={image} alt="Shoes" className="rounded-xl h-full" />
+        </figure>
+        <div className="card-body items-center text-center">
+          <h2 className="card-title">{name}</h2>
+          <p>{description}</p>
+          <div className="card-actions">
+            <button className="btn btn-outline btn-success">
+              <i class="fa-solid fa-cart-plus"></i>Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Home;

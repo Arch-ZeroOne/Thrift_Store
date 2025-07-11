@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "./views/Home";
+import AllProducts from "./views/AllProducts";
 import Dashboard from "./views/admin/Dashboard";
 import Registration from "./views/Registration";
 import AddProduct from "./views/admin/AddProduct";
 import ManageProduct from "./views/admin/ManageProduct";
 import ProductInfo from "./views/ProductInfo";
+import Home from "./views/Home";
 
 const router = createBrowserRouter([
   {
@@ -28,8 +29,12 @@ const router = createBrowserRouter([
     element: <ManageProduct />,
   },
   {
-    path: "/productinfo/:id",
+    path: "allProduct/productinfo/:id",
     element: <ProductInfo />,
+  },
+  {
+    path: "/allProduct",
+    element: <AllProducts />,
   },
 ]);
 
