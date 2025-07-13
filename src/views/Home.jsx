@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import { getTrending } from "../firebase/products";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
+import TrendingCard from "../components/TrendingCard";
 
 function Home() {
   return (
@@ -145,43 +146,24 @@ function TrendingProducts() {
       </div>
       <div className="grid grid-cols-4 gap-8 p-2 w-[95%] mr-auto ml-auto mb-10">
         {trending &&
-          trending.map((data) => (
+          trending.map((item) => (
             <>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onHoverStart={() => console.log("hover started!")}
               >
-                <TrendingCard
-                  name={data.product_name}
-                  description={data.description}
-                  image={data.image}
-                  price={data.price}
-                />
+                <Link to={`allProduct/productinfo/${item.id}`}>
+                  <TrendingCard
+                    key={item.id}
+                    name={item.data.product_name}
+                    description={item.data.description}
+                    image={item.data.image}
+                    price={item.data.price}
+                  />
+                </Link>
               </motion.button>
             </>
           ))}
-      </div>
-    </section>
-  );
-}
-
-function TrendingCard({ name, description, image, price }) {
-  return (
-    <section>
-      <div className="card bg-base-100 w-70 shadow-sm h-100 cursor-pointer">
-        <figure className="px-10 pt-10">
-          <img src={image} alt="Shoes" className="rounded-xl h-full" />
-        </figure>
-        <div className="card-body items-center text-center">
-          <h2 className="card-title">{name}</h2>
-          <p>{description}</p>
-          <div className="card-actions">
-            <button className="btn btn-outline btn-success">
-              <i class="fa-solid fa-cart-plus"></i>Buy Now
-            </button>
-          </div>
-        </div>
       </div>
     </section>
   );

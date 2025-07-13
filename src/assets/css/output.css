@@ -212,9 +212,6 @@
   .z-50 {
     z-index: 50;
   }
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
   .mt-3 {
     margin-top: calc(var(--spacing) * 3);
   }
@@ -235,9 +232,6 @@
   }
   .mt-17 {
     margin-top: calc(var(--spacing) * 17);
-  }
-  .mt-18 {
-    margin-top: calc(var(--spacing) * 18);
   }
   .mt-auto {
     margin-top: auto;
@@ -281,9 +275,6 @@
   .grid {
     display: grid;
   }
-  .hidden {
-    display: none;
-  }
   .table {
     display: table;
   }
@@ -297,9 +288,6 @@
   }
   .h-4 {
     height: calc(var(--spacing) * 4);
-  }
-  .h-5 {
-    height: calc(var(--spacing) * 5);
   }
   .h-10 {
     height: calc(var(--spacing) * 10);
@@ -343,9 +331,6 @@
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
-  .w-5 {
-    width: calc(var(--spacing) * 5);
-  }
   .w-10 {
     width: calc(var(--spacing) * 10);
   }
@@ -376,17 +361,26 @@
   .w-90 {
     width: calc(var(--spacing) * 90);
   }
-  .w-96 {
-    width: calc(var(--spacing) * 96);
-  }
   .w-100 {
     width: calc(var(--spacing) * 100);
   }
   .w-300 {
     width: calc(var(--spacing) * 300);
   }
+  .w-\[\%\] {
+    width: %;
+  }
+  .w-\[6\%\] {
+    width: 6%;
+  }
+  .w-\[9\%\] {
+    width: 9%;
+  }
   .w-\[25\%\] {
     width: 25%;
+  }
+  .w-\[56\%\] {
+    width: 56%;
   }
   .w-\[65\%\] {
     width: 65%;
@@ -397,6 +391,12 @@
   .w-\[80\%\] {
     width: 80%;
   }
+  .w-\[85\%\] {
+    width: 85%;
+  }
+  .w-\[88\%\] {
+    width: 88%;
+  }
   .w-\[90\%\] {
     width: 90%;
   }
@@ -405,6 +405,9 @@
   }
   .w-\[96\%\] {
     width: 96%;
+  }
+  .w-\[905\] {
+    width: 905;
   }
   .w-full {
     width: 100%;
@@ -563,21 +566,6 @@
       border-color: color-mix(in oklab, var(--color-gray-500) 50%, transparent);
     }
   }
-  .border-gray-500\/60 {
-    border-color: color-mix(in srgb, oklch(55.1% 0.027 264.364) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      border-color: color-mix(in oklab, var(--color-gray-500) 60%, transparent);
-    }
-  }
-  .border-gray-600 {
-    border-color: var(--color-gray-600);
-  }
-  .border-gray-600\/60 {
-    border-color: color-mix(in srgb, oklch(44.6% 0.03 256.802) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      border-color: color-mix(in oklab, var(--color-gray-600) 60%, transparent);
-    }
-  }
   .border-gray-700 {
     border-color: var(--color-gray-700);
   }
@@ -614,9 +602,6 @@
   .p-10 {
     padding: calc(var(--spacing) * 10);
   }
-  .px-1 {
-    padding-inline: calc(var(--spacing) * 1);
-  }
   .px-10 {
     padding-inline: calc(var(--spacing) * 10);
   }
@@ -632,6 +617,9 @@
   .indent-3 {
     text-indent: calc(var(--spacing) * 3);
   }
+  .font-\[MontSerrat\] {
+    font-family: MontSerrat;
+  }
   .font-\[Montserrat\] {
     font-family: Montserrat;
   }
@@ -640,9 +628,6 @@
   }
   .font-\[Ubuntu\] {
     font-family: Ubuntu;
-  }
-  .font-mono {
-    font-family: var(--font-mono);
   }
   .text-2xl {
     font-size: var(--text-2xl);
@@ -660,29 +645,9 @@
     font-size: var(--text-5xl);
     line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
-  .text-5xl\/8 {
-    font-size: var(--text-5xl);
-    line-height: calc(var(--spacing) * 8);
-  }
-  .text-5xl\/10 {
-    font-size: var(--text-5xl);
-    line-height: calc(var(--spacing) * 10);
-  }
-  .text-5xl\/15 {
-    font-size: var(--text-5xl);
-    line-height: calc(var(--spacing) * 15);
-  }
   .text-5xl\/16 {
     font-size: var(--text-5xl);
     line-height: calc(var(--spacing) * 16);
-  }
-  .text-5xl\/18 {
-    font-size: var(--text-5xl);
-    line-height: calc(var(--spacing) * 18);
-  }
-  .text-5xl\/20 {
-    font-size: var(--text-5xl);
-    line-height: calc(var(--spacing) * 20);
   }
   .text-lg {
     font-size: var(--text-lg);
@@ -851,16 +816,6 @@
   .md\:grid-cols-3 {
     @media (width >= 48rem) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .lg\:flex {
-    @media (width >= 64rem) {
-      display: flex;
-    }
-  }
-  .lg\:hidden {
-    @media (width >= 64rem) {
-      display: none;
     }
   }
   .lg\:grid-cols-4 {

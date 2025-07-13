@@ -29,7 +29,7 @@ function AllProducts() {
       {spinning && <Spinner />}
 
       {!products && !loading && <EmptyCart />}
-      <section className="p-2 grid grid-cols-2 justify-items-center mt-4 gap-1 mb-5 md:grid-cols-3  lg:grid-cols-4 w-full">
+      <section className="p-2 grid grid-cols-2 justify-items-center mt-10 gap-1 mb-5 md:grid-cols-3  lg:grid-cols-4 w-full">
         {products &&
           products.map((item) => (
             <Link to={`productinfo/${item.prodId}`} className="w-full">

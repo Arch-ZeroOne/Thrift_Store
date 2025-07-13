@@ -165,6 +165,7 @@ function Form() {
               <option>Electronics</option>
               <option>Home and Kitchen</option>
               <option>Automotive</option>
+              <option>School Supply</option>
             </select>
           </div>
         </section>

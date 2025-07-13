@@ -26,7 +26,6 @@ export async function addToCart(id, items) {
     });
     return;
   } else {
-    console.log("Empty");
     await addDoc(collection(firestore, "cart"), {
       userId: id,
       currentCart: items,
@@ -90,15 +89,38 @@ export async function getProduct(id) {
 export async function getTrending() {
   try {
     let items = [];
+    let object_data = {};
 
     const querySnapshot = await getDocs(collection(firestore, "products"));
 
     querySnapshot.forEach((doc) => {
-      items.push(doc.data());
+      object_data.id = doc.id;
+      object_data.data = doc.data();
+      items.push(object_data);
+      object_data = {};
     });
+
+    console.log(items);
 
     if (items.length != 0) {
       return items;
     }
   } catch (error) {}
+}
+
+export async function getSimilar(category) {
+  try {
+    const ref = collection(firestore, "products");
+    const q = query(ref, where("category", "==", category));
+    const snapshot = await getDocs(q);
+    let document = [];
+
+    snapshot.forEach((doc) => {
+      document.push(doc.data());
+    });
+
+    if (document) return document;
+  } catch (error) {
+    console.log("Error Occured in Get Similar", error);
+  }
 }

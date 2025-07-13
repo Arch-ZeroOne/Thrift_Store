@@ -14,7 +14,7 @@ function InfoCard({
     <div className="font-[Poppins] ">
       <div className="flex items-center justify-around bg-base-100 shadow-sm w-[96%] mt-5 mr-auto ml-auto mb-8 border border-gray-500/40 rounded-lg p-10">
         <div className="w-100">
-          <img className="h-100 w-full" src={image} alt="Product Info" />
+          <img className="h-100 w-[88%]" src={image} alt="Product Info" />
         </div>
         <section className=" flex items-center flex-col  h-full gap-10 self-start">
           <div className="flex flex-col gap-5 h-full ">
@@ -52,15 +52,6 @@ function InfoCard({
           </div>
         </section>
       </div>
-      <Similar />
-    </div>
-  );
-}
-
-function Similar() {
-  return (
-    <div className="ml-auto mr-auto w-[90%] font-medium">
-      <h2 className="text-2xl">Similar Products</h2>
     </div>
   );
 }
