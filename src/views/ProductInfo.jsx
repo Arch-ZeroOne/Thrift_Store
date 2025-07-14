@@ -60,8 +60,6 @@ function ProductInfo() {
       quantity: 1,
     };
 
-    console.log(productDetails);
-
     setCart(() => {
       if (cart) {
         const compressed = isExisting(cart, productDetails);
@@ -108,10 +106,12 @@ function ProductInfo() {
         />
       )}
       <div className="w-[90%]">
-        <Similar
-          category={currentProduct.category}
-          product_name={currentProduct.product_name}
-        />
+        {currentProduct.category && (
+          <Similar
+            category={currentProduct.category}
+            product_name={currentProduct.product_name}
+          />
+        )}
       </div>
     </div>
   );
@@ -123,26 +123,23 @@ function Similar({ category, product_name }) {
   useEffect(() => {
     const getData = async () => {
       const data = await getSimilar(category);
-
-      data ? setSimilars(data) : "";
+      if (data) {
+        const filtered = data.filter(
+          (name) => category.product_name != product_name
+        );
+        setSimilars(filtered);
+      } else {
+        setSimilars(data);
+      }
     };
 
     if (category) getData();
-  }, [category]);
-
-  useEffect(() => {
-    if (similars) {
-      const filtered = similars.filter(
-        (item) => item.product_name != product_name
-      );
-      setSimilars(filtered);
-    }
-  }, [similars]);
+  }, []);
 
   return (
-    <div className="flex font-[Montserrat] flex-col gap-2 w-[90%] mr-auto ml-auto mb-10">
-      <h2 className="text-2xl font-bold">Similar Products</h2>
-      <div className="grid grid-cols-4 justify-items-center mr-auto ml-auto gap-5">
+    <div className="w-[98vw] overflow-x-auto overflow-y-hidden whitespace-nowrap flex flex-col gap-8 mb-10">
+      <h2 className="text-2xl font-bold ml-10">Similar Products</h2>
+      <div className="flex gap-5 items-center ">
         {similars &&
           similars.map((item) => (
             <motion.button

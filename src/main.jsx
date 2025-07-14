@@ -8,16 +8,19 @@ import "./assets/css/options.css";
 import LoaderContext from "./context/LoaderContext";
 import RoleContext from "./context/RoleContext";
 import CartContext from "./context/CartContext";
+import FormContext from "./context/FormContext";
 import Navbar from "./components/Navbar";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CartContext>
-      <LoaderContext>
-        <RoleContext>
-          <RouterProvider router={router} />
-        </RoleContext>
-      </LoaderContext>
-    </CartContext>
+    <FormContext>
+      <CartContext>
+        <LoaderContext>
+          <RoleContext>
+            <RouterProvider router={router} />
+          </RoleContext>
+        </LoaderContext>
+      </CartContext>
+    </FormContext>
   </StrictMode>
 );

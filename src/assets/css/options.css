@@ -1,52 +1,84 @@
-/* From Uiverse.io by mahiatlinux */
-:focus {
-  outline: 0;
-  border-color: #4d82ff;
-  box-shadow: 0 0 0 4px #2a4a8f;
+/* From Uiverse.io by Pradeepsaranbishnoi */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mydict div {
+.radio-tile-group {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 0.5rem;
   justify-content: center;
 }
 
-.mydict input[type="radio"] {
-  clip: rect(0 0 0 0);
-  clip-path: inset(100%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
-.mydict input[type="radio"]:checked + span {
-  box-shadow: 0 0 0 0.0625em #4d82ff;
-  background-color: #1c2b4a;
-  z-index: 1;
-  color: #4d82ff;
-}
-
-label span {
-  display: block;
-  cursor: pointer;
-  background-color: #1e2635;
-  padding: 0.375em 0.75em;
+.radio-tile-group .input-container {
   position: relative;
-  margin-left: 0.0625em;
-  box-shadow: 0 0 0 0.0625em #4a5568;
-  letter-spacing: 0.05em;
-  color: #a0aec0;
+  height: 30px;
+  width: 50px;
+  margin: 0.5rem;
+}
+
+.radio-tile-group .input-container .radio-button {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-tile-group .input-container .radio-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #079ad9;
+  border-radius: 10px;
+  padding: 1rem;
+  transition: transform 300ms ease;
+}
+
+.radio-tile-group .input-container .icon svg {
+  fill: #079ad9;
+  width: 2rem;
+  height: 2rem;
+}
+
+.radio-tile-group .input-container .radio-tile-label {
   text-align: center;
-  transition: background-color 0.5s ease;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #079ad9;
 }
 
-label:first-child span {
-  border-radius: 0.375em 0 0 0.375em;
+.radio-tile-group .input-container .radio-button:checked + .radio-tile {
+  background-color: #079ad9;
+  border: 2px solid #079ad9;
+  color: white;
+  transform: scale(1.1, 1.1);
 }
 
-label:last-child span {
-  border-radius: 0 0.375em 0.375em 0;
+.radio-tile-group
+  .input-container
+  .radio-button:checked
+  + .radio-tile
+  .icon
+  svg {
+  fill: white;
+  background-color: #079ad9;
+}
+
+.radio-tile-group
+  .input-container
+  .radio-button:checked
+  + .radio-tile
+  .radio-tile-label {
+  color: white;
+  background-color: #079ad9;
 }

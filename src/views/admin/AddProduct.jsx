@@ -1,12 +1,14 @@
 import React, { useRef } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+
+import Spinner from "../../components/Spinner";
+import Options from "../../components/Options";
+import toast, { Toaster } from "react-hot-toast";
+import { removeBackground } from "../../api/backgroundRemover";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";
-import Spinner from "../../components/Spinner";
-
-import toast, { Toaster } from "react-hot-toast";
 
 function AddProduct() {
   const { loading } = useLoader();
@@ -41,8 +43,15 @@ function Form() {
 
   //async since we are gonna perform requests
   async function handleSubmit() {
+    // const file = imageRef.current.files[0];
+    // //* Creates an UPLOAD URL to get the actual path of the image
+    // // This solves the C:/Fakepath Issue
+    // if (file) {
+    //   const url = URL.createObjectURL(file);
+    //   // console.log(url);
+    //   removeBackground(url);
+    // }
     const url = await getUploadUrl(setLoading, imageRef);
-
     addProduct(
       nameRef,
       descRef,
@@ -78,20 +87,9 @@ function Form() {
 
         <p className="validator-hint">Must be between be a valid number</p>
         <div className="flex gap-2 justify-around">
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full items-center">
             <label className="font-medium">Available Size</label>
-            <select
-              defaultValue="Available Size"
-              className="select select-success"
-              ref={sizeRef}
-            >
-              <option disabled={true}>Pick a Runtime</option>
-              <option>XL</option>
-              <option>S</option>
-              <option>XS</option>
-              <option>M</option>
-              <option>N/A</option>
-            </select>
+            <Options />
           </div>
           <div className="flex flex-col gap-2 w-full">
             <label className="font-medium">SKU(Optional)</label>

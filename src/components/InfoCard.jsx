@@ -1,5 +1,5 @@
 import React from "react";
-
+import Options from "./Options";
 function InfoCard({
   product_name,
   description,
@@ -11,43 +11,39 @@ function InfoCard({
   onAddCart,
 }) {
   return (
-    <div className="font-[Poppins] ">
-      <div className="flex items-center justify-around bg-base-100 shadow-sm w-[96%] mt-5 mr-auto ml-auto mb-8 border border-gray-500/40 rounded-lg p-10">
-        <div className="w-100">
-          <img className="h-100 w-[88%]" src={image} alt="Product Info" />
-        </div>
-        <section className=" flex items-center flex-col  h-full gap-10 self-start">
+    <div className="font-[Geist] ">
+      <div className="flex  items-center justify-between  bg-base-100 shadow-sm w-[98%] mt-5  mb-8 border border-gray-500/40 rounded-md p-10 ml-auto mr-auto ">
+        <img
+          className="h-100 w-[40%] ml-auto mr-auto"
+          src={image}
+          alt="Product Info"
+        />
+
+        <section className="flex items-center flex-col  h-full gap-10 self-start w-[40%] pr-10 ">
           <div className="flex flex-col gap-5 h-full ">
-            <div className="flex flex-col gap-2">
-              <h2 className=" text-3xl font-bold ">{product_name}</h2>
-              <div className="flex items-center gap-3 ">
-                <p className="font-semibold text-lg">{price}</p>
-                <p className="font-medium">
-                  <span className="font-bold text-lg">Stock:</span> {stock}
-                </p>
+            <div className="flex flex-col gap-5">
+              <h2 className=" text-5xl font-bold ">{product_name}</h2>
+              <div className="flex items-center gap-3 flex-col">
+                <div className="border rounded-4xl w-30 text-center bg-blue-600 text-white p-2 self-start">
+                  ${price} USD
+                </div>
+                <div className="self-start border-1 border-gray-500 w-115"></div>
               </div>
-              <p className="text-md font-medium  opacity-80 ">
-                This item is originally retailed from
-              </p>
             </div>
             <div>
-              <span className="font-bold">Product Size:</span>
-              {size}
+              <span className="font-bold">SIZE</span>
+              <Options />
             </div>
             <div className="flex flex-col gap-2">
-              <h4 className="font-bold">Product Description:</h4>
               <p>{description}</p>
             </div>
           </div>
           <div className=" justify-end flex items-center gap-3">
-            <button className="btn btn-neutral w-45 p-7 text-2xl">
-              Buy Now
-            </button>
             <button
-              className="btn btn-primary w-45 p-7 "
+              class="inline-flex items-center gap-2  justify-center px-4 py-2 bg-blue-600 ease-in-out delay-75 hover:bg-blue-700 text-white text-xl font-medium rounded-2xl hover:-translate-y-1 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer w-80 p-3"
               onClick={() => onAddCart(product_name, price, image)}
             >
-              Add To Cart
+              <i class="fa-solid fa-cart-plus"></i> Add To Cart
             </button>
           </div>
         </section>

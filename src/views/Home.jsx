@@ -12,10 +12,10 @@ function Home() {
       <Navbar />
       <div className="font-[Ubuntu] flex flex-col gap-5">
         <section className=" flex mt-17 w-[90%] ml-auto mr-auto mb-20">
-          <di v className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5">
             <Hero />
             <Buttons />
-          </di>
+          </div>
 
           <div className="w-300">
             <img src={Logo}></img>
@@ -53,11 +53,11 @@ function Buttons() {
   return (
     <div className="flex items-center gap-6">
       <button className="btn btn-outline btn-primary">
-        <i class="fa-solid fa-arrow-right-long"></i>
+        <i className="fa-solid fa-arrow-right-long"></i>
         Get Started
       </button>
       <button className="btn btn-outline btn-secondary">
-        <i class="fa-solid fa-magnifying-glass-plus"></i>Learn More
+        <i className="fa-solid fa-magnifying-glass-plus"></i>Learn More
       </button>
     </div>
   );
@@ -140,11 +140,11 @@ function TrendingProducts() {
           <p>Explore Our Trending Products</p>
         </div>
         <button className="btn btn-neutral btn-outline">
-          <i class="fa-solid fa-arrow-right-long"></i>
+          <i className="fa-solid fa-arrow-right-long"></i>
           <Link to="/allProduct">View All Products</Link>
         </button>
       </div>
-      <div className="grid grid-cols-4 gap-8 p-2 w-[95%] mr-auto ml-auto mb-10">
+      <div className="grid grid-cols-3 gap-8 p-2 w-[95%] mr-auto ml-auto mb-10">
         {trending &&
           trending.map((item) => (
             <>

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Empty from "../assets/svg/empty-cart.svg";
 import Loader from "../components/Loader";
 import Spinner from "../components/Spinner";
+import TrendingCard from "../components/TrendingCard";
 import { Link } from "react-router-dom";
 import { firestore } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
@@ -29,7 +30,7 @@ function AllProducts() {
       {spinning && <Spinner />}
 
       {!products && !loading && <EmptyCart />}
-      <section className="p-2 grid grid-cols-2 justify-items-center mt-10 gap-1 mb-5 md:grid-cols-3  lg:grid-cols-4 w-full">
+      <section className="p-2 grid grid-cols-2 justify-items-center mt-10 gap-5 mb-5 md:grid-cols-3   w-full">
         {products &&
           products.map((item) => (
             <Link to={`productinfo/${item.prodId}`} className="w-full">
@@ -37,7 +38,7 @@ function AllProducts() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <ProductCard
+                <TrendingCard
                   name={item.product_name}
                   description={item.description}
                   image={item.image}
