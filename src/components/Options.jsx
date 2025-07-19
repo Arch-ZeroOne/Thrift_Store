@@ -3,9 +3,8 @@ import { useSelected } from "../context/FormContext";
 function Options() {
   const { setSelected } = useSelected();
 
-  //TODO Working here on handling mutliple selected
   const handleSelected = (e) => {
-    console.log(e.target.value);
+    setSelected(e.target.value);
   };
 
   return (
@@ -118,6 +117,21 @@ function Options() {
             <div class="radio-tile">
               <label for="drive" class="radio-tile-label">
                 XXXL
+              </label>
+            </div>
+          </div>
+          <div class="input-container">
+            <input
+              id="drive"
+              class="radio-button"
+              type="radio"
+              name="radio"
+              value="N/A"
+              onClick={(e) => handleSelected(e)}
+            />
+            <div class="radio-tile">
+              <label for="drive" class="radio-tile-label">
+                NA
               </label>
             </div>
           </div>

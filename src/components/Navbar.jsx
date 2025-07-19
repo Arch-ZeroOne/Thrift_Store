@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 const google_provider = new GoogleAuthProvider();
 const github_provider = new GithubAuthProvider();
 
+//Constant for error codes receive from firebase responses
 export const ERR0R_CODE = {
   INVALID_EMAIL: "auth/invalid-email",
   INVALID_CREDENTIALS: "auth/invalid-credential",
