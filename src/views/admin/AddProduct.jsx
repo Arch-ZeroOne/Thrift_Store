@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Spinner from "../../components/Spinner";
@@ -21,7 +21,6 @@ function AddProduct() {
       <Sidebar />
       <div className="w-full flex flex-col gap-2">
         <Header />
-
         <Form />
       </div>
     </div>
@@ -43,30 +42,71 @@ function Form() {
   const { setLoading } = useLoader();
   const { selected } = useSelected();
 
-  //async since we are gonna perform requests
-  async function handleSubmit() {
+  //States
+  const [productImages, setProductImages] = useState([
+    {
+      id: 1,
+      image: Default,
+      switched: false,
+    },
+    {
+      id: 2,
+      image: Default,
+      switched: false,
+    },
+    {
+      id: 3,
+      image: Default,
+      switched: false,
+    },
+    {
+      id: 4,
+      image: Default,
+      switched: false,
+    },
+  ]);
+
+  useEffect(() => console.log(imageRef.current.value), [imageRef]);
+
+  //* Event for handling changes when the seller uploads an image via Add Image
+  const handleImageChange = () => {
+    //* Creates an UPLOAD URL to get the actual path of the image
+    //*  This solves the C:/Fakepath Issue
     const file = imageRef.current.files[0];
-    // //* Creates an UPLOAD URL to get the actual path of the image
-    // // This solves the C:/Fakepath Issue
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      imageUrlRef.current.value = imageUrl;
+      var hasChanged = false;
+
+      const modified = productImages.map((data) => {
+        if (data.switched == false && !hasChanged) {
+          data.image = imageUrl;
+          data.switched = true;
+          hasChanged = true;
+        }
+        return data;
+      });
+
+      setProductImages(modified);
     }
-    const url = await getUploadUrl(setLoading, imageRef);
-    addProduct(
-      nameRef,
-      descRef,
-      selected,
-      skuRef,
-      priceRef,
-      stockRef,
-      discountRef,
-      qualityRef,
-      categoryRef,
-      url,
-      imageRef,
-      setLoading
-    );
+  };
+
+  //async since we are gonna perform requests
+  async function handleSubmit() {
+    // const url = await getUploadUrl(setLoading, imageRef);
+    // addProduct(
+    //   nameRef,
+    //   descRef,
+    //   selected,
+    //   skuRef,
+    //   priceRef,
+    //   stockRef,
+    //   discountRef,
+    //   qualityRef,
+    //   categoryRef,
+    //   url,
+    //   imageRef,
+    //   setLoading
+    // );
   }
   return (
     <div className="font-[Poppins] flex flex-col items-center gap-7 h-screen overflow-scroll p-5 ">
@@ -148,33 +188,31 @@ function Form() {
         </div>
 
         <section className="flex flex-col items-center  gap-5  mb-5 w-full">
-          <div className="flex flex-col gap-1 border  border-gray-500/50 p-3 rounded-xl ">
+          <div className="flex flex-col gap-4 border  border-gray-500/50 p-5 rounded-xl ">
             <label className="text-lg font-bold">Product Image</label>
 
-            <section className="grid grid-cols-2 gap-2 mb-3">
-              <div>
-                <img src={Default} alt="" className="rounded-xl" />
-              </div>
-              <div>
-                <img src={Default} alt="" className="rounded-xl" />
-              </div>
-              <div>
-                <img src={Default} alt="" className="rounded-xl" />
-              </div>
-              <div>
-                <img src={Default} alt="" className="rounded-xl" />
-              </div>
+            <section className="grid grid-cols-2 gap-5 justify-items-center">
+              {productImages &&
+                productImages.map((data) => (
+                  <img src={data.image} alt="" className="rounded-xl h-50" />
+                ))}
             </section>
-            <div className="border-3  border-dotted  w-10 p-2 h-13 rounded-xl flex justify-center cursor-pointer ">
-              <i class="fa-solid fa-plus "></i>
+
+            <button className="btn btn-neutral relative cursor-pointer">
+              Add Image <i class="fa-solid fa-image"></i>
+              {/*
+               * Added opacity-0 to remove visibility to the input while maintaining its interactivity
+               * Relative to the parent element (button) and absolute to the actual input
+               */}
               <input
                 id="image"
                 accept="image/*"
-                type="file"
                 ref={imageRef}
-                hidden
+                type="file"
+                className="opacity-0 absolute"
+                onChange={() => handleImageChange()}
               />
-            </div>
+            </button>
           </div>
 
           <div className="flex flex-col gap-1 font-[Poppins] rounded-xl border  border-gray-500/50 w-full p-2">
