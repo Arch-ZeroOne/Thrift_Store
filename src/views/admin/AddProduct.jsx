@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Spinner from "../../components/Spinner";
@@ -42,7 +42,7 @@ function Form() {
   const { setLoading } = useLoader();
   const { selected } = useSelected();
 
-  //States
+  //state for image preview
   const [productImages, setProductImages] = useState([
     {
       id: 1,
@@ -66,17 +66,19 @@ function Form() {
     },
   ]);
 
-  useEffect(() => console.log(imageRef.current.value), [imageRef]);
+  //state for adding image
+  const [images, setImages] = useState([]);
 
   //* Event for handling changes when the seller uploads an image via Add Image
-  const handleImageChange = () => {
+  const handleImageChange = async () => {
     //* Creates an UPLOAD URL to get the actual path of the image
     //*  This solves the C:/Fakepath Issue
     const file = imageRef.current.files[0];
+
     if (file) {
+      //*Host the uploaded image temporarily
       const imageUrl = URL.createObjectURL(file);
       var hasChanged = false;
-
       const modified = productImages.map((data) => {
         if (data.switched == false && !hasChanged) {
           data.image = imageUrl;
@@ -86,27 +88,30 @@ function Form() {
         return data;
       });
 
+      //handles the URL of the currently added image
+      await getUploadUrl(file, setImages, images);
       setProductImages(modified);
     }
   };
 
   //async since we are gonna perform requests
-  async function handleSubmit() {
-    // const url = await getUploadUrl(setLoading, imageRef);
-    // addProduct(
-    //   nameRef,
-    //   descRef,
-    //   selected,
-    //   skuRef,
-    //   priceRef,
-    //   stockRef,
-    //   discountRef,
-    //   qualityRef,
-    //   categoryRef,
-    //   url,
-    //   imageRef,
-    //   setLoading
-    // );
+  function handleSubmit() {
+    addProduct(
+      nameRef,
+      descRef,
+      selected,
+      skuRef,
+      priceRef,
+      stockRef,
+      discountRef,
+      qualityRef,
+      categoryRef,
+      images,
+      imageRef,
+      setLoading,
+      setImages,
+      setProductImages
+    );
   }
   return (
     <div className="font-[Poppins] flex flex-col items-center gap-7 h-screen overflow-scroll p-5 ">
@@ -178,7 +183,7 @@ function Form() {
             </div>
             <div className="flex flex-col  gap-1">
               <label className="font-medium">Quality</label>
-              <select ref={qualityRef} className="select">
+              <select ref={qualityRef} className="select font-mono">
                 <option>New</option>
                 <option>Refurbished</option>
                 <option>Used</option>
@@ -194,12 +199,18 @@ function Form() {
             <section className="grid grid-cols-2 gap-5 justify-items-center">
               {productImages &&
                 productImages.map((data) => (
-                  <img src={data.image} alt="" className="rounded-xl h-50" />
+                  <div className="border rounded-xl w-full border-black/60">
+                    <img
+                      src={data.image}
+                      alt=""
+                      className="rounded-xl  h-50 mr-auto ml-auto w-full"
+                    />
+                  </div>
                 ))}
             </section>
 
             <button className="btn btn-neutral relative cursor-pointer">
-              Add Image <i class="fa-solid fa-image"></i>
+              Add Image <i class="fa-solid fa-image cursor-pointer"></i>
               {/*
                * Added opacity-0 to remove visibility to the input while maintaining its interactivity
                * Relative to the parent element (button) and absolute to the actual input
@@ -209,18 +220,18 @@ function Form() {
                 accept="image/*"
                 ref={imageRef}
                 type="file"
-                className="opacity-0 absolute"
+                className="opacity-0 absolute cursor-pointer"
                 onChange={() => handleImageChange()}
               />
             </button>
           </div>
 
-          <div className="flex flex-col gap-1 font-[Poppins] rounded-xl border  border-gray-500/50 w-full p-2">
+          <div className="flex flex-col gap-1 rounded-xl border  border-gray-500/50 w-full p-2">
             <label className="font-medium">Product Category</label>
             <select
               ref={categoryRef}
               defaultValue="Product Category"
-              className="select "
+              className="select font-mono"
             >
               <option>Fashion</option>
               <option>Electronics</option>
@@ -245,9 +256,11 @@ async function addProduct(
   discountRef,
   qualityRef,
   categoryRef,
-  url,
+  images,
   imageRef,
-  setLoading
+  setLoading,
+  setImages,
+  setProductImages
 ) {
   const notifySuccess = () => {
     toast.success("Product is Successfully Added!");
@@ -263,7 +276,7 @@ async function addProduct(
     !priceRef.current.value ||
     !stockRef.current.value ||
     !qualityRef.current.value ||
-    !url ||
+    !images ||
     !categoryRef.current.value
   ) {
     notifyEmpty();
@@ -272,6 +285,7 @@ async function addProduct(
   }
 
   try {
+    setLoading(true);
     const docRef = await addDoc(collection(firestore, "products"), {
       product_name: nameRef.current.value,
       description: descRef.current.value,
@@ -281,7 +295,7 @@ async function addProduct(
       stock: stockRef.current.value,
       discount: discountRef.current.value || null,
       quality: qualityRef.current.value,
-      image: url,
+      image: images,
       category: categoryRef.current.value,
     }).then(() => {
       setLoading(false);
@@ -292,18 +306,44 @@ async function addProduct(
       priceRef.current.value = "0";
       stockRef.current.value = "0";
       discountRef.current.value = "0";
-      docRef.unsubsribe();
       notifySuccess();
+
+      //* Resets the state that holds the links and the preview
+      setImages([]);
+      setProductImages([
+        {
+          id: 1,
+          image: Default,
+          switched: false,
+        },
+        {
+          id: 2,
+          image: Default,
+          switched: false,
+        },
+        {
+          id: 3,
+          image: Default,
+          switched: false,
+        },
+        {
+          id: 4,
+          image: Default,
+          switched: false,
+        },
+      ]);
     });
   } catch (error) {
     console.log(error);
   }
 }
 
-async function getUploadUrl(setLoading, imageRef) {
+//TODO : Curently Testing The Image Upload using url
+async function getUploadUrl(imageUrl, setImages, images) {
   try {
-    setLoading(true);
-    const file = imageRef.current.files[0];
+    if (images.length == 4) return;
+
+    const file = imageUrl;
     if (!file) return;
     const data = new FormData();
     data.append("file", file);
@@ -320,7 +360,7 @@ async function getUploadUrl(setLoading, imageRef) {
     const response = await res.json();
     const { url } = response;
 
-    return url;
+    setImages([...images, url]);
   } catch (error) {
     console.log("Error in get upload url");
     console.log(error);
