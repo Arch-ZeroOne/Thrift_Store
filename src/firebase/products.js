@@ -124,3 +124,23 @@ export async function getSimilar(category) {
     console.log("Error Occured in Get Similar", error);
   }
 }
+
+// Here we can have a TypeError: can't access property "_freezeSettings", e is undefined when we try to query an undefined or null database
+export async function getProductBySeller(seller_id) {
+  try {
+    const docRef = collection(firestore, "products");
+    const q = query(docRef, where("seller_id", "==", seller_id));
+    const snapShot = await getDocs(q);
+    let products = [];
+
+    snapShot.forEach((doc) => {
+      products.push(doc.data());
+    });
+
+    if (products.length > 0) {
+      return products;
+    }
+  } catch (error) {
+    console.log("Error in get product by seller", error);
+  }
+}

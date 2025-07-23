@@ -9,6 +9,7 @@ import { removeBackground } from "../../api/backgroundRemover";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";
+import { useUser } from "../../context/RoleContext";
 import Default from "/default-addProduct.jpg";
 
 function AddProduct() {
@@ -41,6 +42,7 @@ function Form() {
 
   const { setLoading } = useLoader();
   const { selected } = useSelected();
+  const { currentUser } = useUser();
 
   //state for image preview
   const [productImages, setProductImages] = useState([
@@ -97,6 +99,7 @@ function Form() {
   //async since we are gonna perform requests
   function handleSubmit() {
     addProduct(
+      currentUser.uid,
       nameRef,
       descRef,
       selected,
@@ -247,6 +250,7 @@ function Form() {
 }
 
 async function addProduct(
+  seller_id,
   nameRef,
   descRef,
   selected,
@@ -287,6 +291,7 @@ async function addProduct(
   try {
     setLoading(true);
     const docRef = await addDoc(collection(firestore, "products"), {
+      seller_id: seller_id,
       product_name: nameRef.current.value,
       description: descRef.current.value,
       size: selected,
