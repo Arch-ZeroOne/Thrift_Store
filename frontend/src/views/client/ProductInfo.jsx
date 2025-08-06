@@ -1,16 +1,16 @@
 import React, { use, useEffect, useState } from "react";
-import { useUser } from "../context/RoleContext";
-import { useCart } from "../context/CartContext";
+import { useUser } from "../../context/RoleContext";
+import { useCart } from "../../context/CartContext";
 import { useParams } from "react-router-dom";
-import { getProduct } from "../firebase/products";
-import { auth } from "../firebase/config";
-import { addToCart, isExisting } from "../firebase/products";
-import { getAllCart } from "../firebase/products";
-import Navbar from "../components/Navbar";
-import InfoCard from "../components/InfoCard";
-import TrendingCard from "../components/TrendingCard";
+import { getProduct } from "../../firebase/products";
+import { auth } from "../../firebase/config";
+import { addToCart, isExisting } from "../../firebase/products";
+import { getAllCart } from "../../firebase/products";
+import Navbar from "../../components/Navbar";
+import InfoCard from "../../components/InfoCard";
+import TrendingCard from "../../components/TrendingCard";
 import toast, { Toaster } from "react-hot-toast";
-import { getSimilar } from "../firebase/products";
+import { getSimilar } from "../../firebase/products";
 import { motion } from "motion/react";
 function ProductInfo() {
   const { id } = useParams();

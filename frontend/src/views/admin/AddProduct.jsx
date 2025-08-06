@@ -5,7 +5,6 @@ import Spinner from "../../components/Spinner";
 import Options from "../../components/Options";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelected } from "../../context/FormContext";
-import { removeBackground } from "../../api/backgroundRemover";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { useLoader } from "../../context/LoaderContext";

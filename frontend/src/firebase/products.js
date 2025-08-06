@@ -11,6 +11,23 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+export async function getAllProduct() {
+  //sets the loading state
+  const snapshot = await getDocs(collection(firestore, "products"));
+  let query = [];
+  snapshot.forEach((data) => {
+    const products = data.data();
+    products.prodId = data.id;
+
+    query.push(products);
+  });
+
+  if (query.length > 0) {
+    return query;
+  }
+  
+}
+
 export async function addToCart(id, items) {
   const docRef = collection(firestore, "cart");
   const q = query(docRef, where("userId", "==", id));

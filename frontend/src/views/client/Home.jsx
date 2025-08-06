@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Logo from "/hero-logo.svg";
-import Navbar from "../components/Navbar";
-import { getTrending } from "../firebase/products";
+import Navbar from "../../components/Navbar";
+import { getTrending } from "../../firebase/products";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import TrendingCard from "../components/TrendingCard";
+import TrendingCard from "../../components/TrendingCard";
 
 function Home() {
   return (

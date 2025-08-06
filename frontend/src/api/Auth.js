@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//Adds 
+
 function createClaims(uid, isSeller) {
   axios.post("http://localhost:3000/token", { id: uid, seller: isSeller });
 }

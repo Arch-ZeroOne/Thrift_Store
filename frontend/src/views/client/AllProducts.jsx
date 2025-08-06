@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import Empty from "../assets/svg/empty-cart.svg";
-import Loader from "../components/Loader";
-import Spinner from "../components/Spinner";
-import TrendingCard from "../components/TrendingCard";
+import Navbar from "../../components/Navbar";
+import Empty from "../../assets/svg/empty-cart.svg";
+import Loader from "../../components/Loader";
+import Spinner from "../../components/Spinner";
+import TrendingCard from "../../components/TrendingCard";
 import { Link } from "react-router-dom";
-import { firestore } from "../firebase/config";
+import { firestore } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
-import { useLoader } from "../context/LoaderContext";
-import { useSpinner } from "../context/LoaderContext";
+import { useLoader } from "../../context/LoaderContext";
+import { useSpinner } from "../../context/LoaderContext";
 import { motion } from "motion/react";
 
 function AllProducts() {

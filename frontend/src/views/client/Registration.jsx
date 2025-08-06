@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Icon from "../assets/images/e-commerce.png";
+import Icon from "../../assets/images/e-commerce.png";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -7,11 +7,11 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
-import { auth } from "../firebase/config";
+import { auth } from "../../firebase/config";
 import { useRef } from "react";
-import { ERR0R_CODE } from "../components/Navbar";
-import { useRole, useUser } from "../context/RoleContext";
-import createClaims from "../api/Auth";
+import { ERR0R_CODE } from "../../components/Navbar";
+import { useRole, useUser } from "../../context/RoleContext";
+import createClaims from "../../api/Auth";
 import Swal from "sweetalert2";
 
 function Registration() {

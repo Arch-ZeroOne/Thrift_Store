@@ -1,11 +1,14 @@
-import { createBrowserRouter } from "react-router-dom";
-import AllProducts from "./views/AllProducts";
+//Admin Components
 import Dashboard from "./views/admin/Dashboard";
-import Registration from "./views/Registration";
 import AddProduct from "./views/admin/AddProduct";
-import ManageProduct from "./views/admin/ManageProduct";
-import ProductInfo from "./views/ProductInfo";
-import Home from "./views/Home";
+import TrackProduct from "./views/admin/TrackProduct";
+//Client components
+import AllProducts from "./views/client/AllProducts";
+import Registration from "./views/client/Registration";
+import ProductInfo from "./views/client/ProductInfo";
+import Home from "./views/client/Home";
+
+import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -24,10 +27,7 @@ const router = createBrowserRouter([
     path: "/addProduct",
     element: <AddProduct />,
   },
-  {
-    path: "/manageProduct",
-    element: <ManageProduct />,
-  },
+
   {
     path: "allProduct/productinfo/:id",
     element: <ProductInfo />,
@@ -35,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/allProduct",
     element: <AllProducts />,
+  },
+  {
+    path: "/trackproduct",
+    element: <TrackProduct />,
   },
 ]);
 
