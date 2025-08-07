@@ -49,7 +49,7 @@ function Navbar() {
   useEffect(() => {
     if (currentUser) {
       if (seller) {
-        navigate("/dashboard");
+        navigate("/admin");
       }
     }
   }, [seller, currentUser]);
@@ -91,7 +91,7 @@ function Links() {
         <Link to="/">Home</Link>
       </li>
       <li className="hover:underline underline-offset-8 hover:opacity-50">
-        <Link to="/allProduct">All Products</Link>
+        <Link to="/allproducts">All Products</Link>
       </li>
     </div>
   );

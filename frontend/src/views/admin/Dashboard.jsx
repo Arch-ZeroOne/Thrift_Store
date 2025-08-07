@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Overview from "../../components/Overview";
 import { useUser } from "../../context/RoleContext";
@@ -16,7 +15,6 @@ function Dashboard() {
 
   return (
     <div className="flex w-full">
-      <Sidebar />
       <section className="w-full flex flex-col gap-5">
         <div className="w-full flex flex-col gap-3">
           <Header />

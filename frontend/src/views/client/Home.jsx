@@ -157,7 +157,7 @@ function TrendingProducts() {
                     key={item.id}
                     name={item.data.product_name}
                     description={item.data.description}
-                    image={item.data.image}
+                    image={item.data.image[0]}
                     price={item.data.price}
                   />
                 </Link>

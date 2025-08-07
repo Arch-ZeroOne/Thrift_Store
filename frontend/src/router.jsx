@@ -7,8 +7,10 @@ import AllProducts from "./views/client/AllProducts";
 import Registration from "./views/client/Registration";
 import ProductInfo from "./views/client/ProductInfo";
 import Home from "./views/client/Home";
+import DashboardLayout from "./views/layout/DashboardLayout";
 
 import { createBrowserRouter } from "react-router-dom";
+import ManageProduct from "./views/admin/ManageProduct";
 
 const router = createBrowserRouter([
   {
@@ -20,25 +22,36 @@ const router = createBrowserRouter([
     element: <Registration />,
   },
   {
-    path: "/dashboard",
-    element: <Dashboard />,
+    path: "/allproducts",
+    element: <AllProducts />,
   },
-  {
-    path: "/addProduct",
-    element: <AddProduct />,
-  },
-
   {
     path: "allProduct/productinfo/:id",
     element: <ProductInfo />,
   },
+
+  //Admin routes
   {
-    path: "/allProduct",
-    element: <AllProducts />,
-  },
-  {
-    path: "/trackproduct",
-    element: <TrackProduct />,
+    path: "/admin",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: "addproduct",
+        element: <AddProduct />,
+      },
+      {
+        path: "trackproduct",
+        element: <TrackProduct />,
+      },
+      {
+        path: "inventory",
+        element: <ManageProduct />,
+      },
+    ],
   },
 ]);
 

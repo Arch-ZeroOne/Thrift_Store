@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Spinner from "../../components/Spinner";
 import Options from "../../components/Options";
@@ -18,7 +17,6 @@ function AddProduct() {
     <div className="flex h-screen font-[Ubuntu]">
       <Toaster />
       {loading && <Spinner />}
-      <Sidebar />
       <div className="w-full flex flex-col gap-2">
         <Header />
         <Form />
@@ -301,6 +299,7 @@ async function addProduct(
       quality: qualityRef.current.value,
       image: images,
       category: categoryRef.current.value,
+      status: "Available",
     }).then(() => {
       setLoading(false);
       nameRef.current.value = "";

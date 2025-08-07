@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 
 app.use(express.json());
+//initializes the route file
 const tokenRouter = require("./routes/token");
 //TODO CORS Error occuring
 //will enable CORS policy

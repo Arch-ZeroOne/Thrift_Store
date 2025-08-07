@@ -15,7 +15,6 @@ function AllProducts() {
   //state for loading and products list
   const [products, setProducts] = useState();
   const { loading, setLoading } = useLoader();
-
   const { spinning } = useSpinner();
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function AllProducts() {
                 <TrendingCard
                   name={item.product_name}
                   description={item.description}
-                  image={item.image}
+                  image={item.image[0]}
                   price={item.price}
                 />
               </motion.button>
@@ -57,23 +56,6 @@ function EmptyCart() {
     <div className=" items-center mt-15 flex flex-col gap-4 justify-center">
       <img src={Empty} className="h-80" alt="" />
       <h2 className="font-bold text-2xl">Store is Currently Empty</h2>
-    </div>
-  );
-}
-
-function ProductCard({ name, description, image, price }) {
-  return (
-    <div className="card bg-base-100 h-100 w-[90%] shadow-sm mb-7 cursor-pointer">
-      <figure>
-        <img src={image} className="h-80 w-full" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{name}</h2>
-        <p>{description}</p>
-        <div className="card-actions justify-end">
-          <p className="text-green-600 self-end font-bold text-xl">${price}</p>
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,13 +1,16 @@
 import React from "react";
-import Logo from "../assets/icons/site-logo.png";
-
+import Logo from "../../assets/icons/site-logo.png";
 import { NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-function Sidebar() {
+function DashboardLayout() {
   return (
-    <div className="font-[Ubuntu] flex flex-col gap-7 w-[25%] bg-[#1E1E24] h-screen">
-      <Name />
-      <Links />
+    <div className="flex ">
+      <div className="font-[Ubuntu] flex flex-col gap-7 w-[25%] bg-[#1E1E24] h-screen">
+        <Name />
+        <Links />
+      </div>
+      <Outlet />
     </div>
   );
 }
@@ -19,7 +22,7 @@ function Links() {
         <li>
           <div className="flex items-center ">
             <i class="fa-solid fa-gauge text-lg"></i>
-            <NavLink to="/dashboard">
+            <NavLink to="/admin">
               <p className="text-[17px]">Dashboard</p>
             </NavLink>
           </div>
@@ -33,7 +36,7 @@ function Links() {
               <li>
                 <div className="flex items-center">
                   <i class="fa-solid fa-file-circle-plus"></i>
-                  <NavLink to="/addProduct">
+                  <NavLink to="/admin/addproduct">
                     <p className="text-[17px]">Add Product</p>
                   </NavLink>
                 </div>
@@ -41,7 +44,7 @@ function Links() {
               <li>
                 <div className="flex items-center">
                   <i class="fa-solid fa-bars-progress"></i>
-                  <NavLink to="/manageProduct">
+                  <NavLink to="/admin/trackproduct">
                     <p className="text-[17px]">Manage Product</p>
                   </NavLink>
                 </div>
@@ -49,7 +52,9 @@ function Links() {
               <li>
                 <div className="flex items-center">
                   <i class="fa-solid fa-warehouse"></i>
-                  <p className="text-[17px]">Inventory</p>
+                  <NavLink to="/admin/inventory">
+                    <p className="text-[17px]">Inventory</p>
+                  </NavLink>
                 </div>
               </li>
             </ul>
@@ -78,4 +83,4 @@ function Name() {
   );
 }
 
-export default Sidebar;
+export default DashboardLayout;
