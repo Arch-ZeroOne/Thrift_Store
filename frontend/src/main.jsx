@@ -9,18 +9,21 @@ import LoaderContext from "./context/LoaderContext";
 import RoleContext from "./context/RoleContext";
 import CartContext from "./context/CartContext";
 import FormContext from "./context/FormContext";
+import PopUpModalContext from "./context/PopupModalContext";
 import Navbar from "./components/Navbar";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <FormContext>
-      <CartContext>
-        <LoaderContext>
-          <RoleContext>
-            <RouterProvider router={router} />
-          </RoleContext>
-        </LoaderContext>
-      </CartContext>
-    </FormContext>
+    <PopUpModalContext>
+      <FormContext>
+        <CartContext>
+          <LoaderContext>
+            <RoleContext>
+              <RouterProvider router={router} />
+            </RoleContext>
+          </LoaderContext>
+        </CartContext>
+      </FormContext>
+    </PopUpModalContext>
   </StrictMode>
 );
