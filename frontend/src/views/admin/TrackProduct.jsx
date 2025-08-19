@@ -89,6 +89,12 @@ function TrackProduct() {
   return (
     <section className="w-full flex flex-col gap-5">
       <Header />
+
+      <button className="btn btn-soft btn-primary self-end mr-20">
+        <NavLink to={"/admin/addproduct"}>Add New</NavLink>
+        <i class="fa-solid fa-arrow-right-long"></i>
+      </button>
+
       <div className="flex justify-center">
         <div style={{ height: 500, width: 950 }}>
           <AgGridReact
@@ -105,9 +111,29 @@ function TrackProduct() {
 }
 
 function ActionsComponents(params) {
+  const { data } = params;
+
+  /*
+  
+  category,
+  description,
+  discount,
+  price,
+  product_name,
+  stock,
+  image,
+  */
   return (
     <div className="flex items-center justify-center h-full">
-      <ViewButton />
+      <ViewButton
+        category={data.category}
+        description={data.description}
+        discount={data.description}
+        price={data.price}
+        product_name={data.product_name}
+        stock={data.stock}
+        image={data.image[0]}
+      />
     </div>
   );
 }
@@ -166,30 +192,45 @@ function BadgeRenderer(params) {
   );
 }
 
-function ViewButton() {
+function ViewButton({
+  category,
+  description,
+  discount,
+  price,
+  product_name,
+  stock,
+  image,
+}) {
   return (
-    <div className="cursor-pointer">
-      <div>
-        {/* You can open the modal using document.getElementById('ID').showModal() method */}
-        <i
-          class="fa-solid fa-eye text-lg"
-          title="View Product Details"
-          onClick={() => document.getElementById("my_modal_3").showModal()}
-        ></i>
-        <dialog id="my_modal_3" className="modal">
-          <div className="modal-box">
+    <div className="cursor-pointer font-[Poppins]" title="Expand Details">
+      <i
+        className="fa-solid fa-eye text-lg"
+        onClick={() => document.getElementById("my_modal_4").showModal()}
+      ></i>
+      <dialog id="my_modal_4" className="modal">
+        <div className="modal-box w-30 max-w-5xl">
+          <h3 className="font-bold text-lg">Product Information</h3>
+          <section className="flex items-center gap-5">
+            <div>
+              <img src={image} className="h-50"></img>
+              <p className="font-bold">{product_name}</p>
+            </div>
+            <div>
+              <p>{price}</p>
+              <p>{category}</p>
+              <p>{description}</p>
+              <p>{discount}</p>
+              <p>{stock}</p>
+            </div>
+          </section>
+          <div className="modal-action">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                ✕
-              </button>
+              {/* if there is a button, it will close the modal */}
+              <button className="btn">Close</button>
             </form>
-            <h3 className="font-bold text-lg">Hello!</h3>
-            <p className="py-4">Press ESC key or click on ✕ button to close</p>
           </div>
-        </dialog>
-      </div>
-      ;
+        </div>
+      </dialog>
     </div>
   );
 }
