@@ -12,6 +12,11 @@ function ManageProduct() {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([
     {
+      field: "image",
+      headerName: "Image",
+    },
+
+    {
       field: "product_name",
       headerName: "Product Name",
     },
@@ -37,7 +42,7 @@ function ManageProduct() {
       headerName: "Status",
     },
     {
-      field: "actions",
+      field: "prodId",
       headerName: "Actions",
       cellRenderer: ActionButtons,
       width: 200,

@@ -18,7 +18,7 @@ function ProductInfo() {
   //* Handles and saves the current cart
   const { cart, setCart } = useCart();
 
-  //* Holds the current user based on AUTH
+  //* Container for the current user based on AUTH
   const { currentUser } = useUser();
   useEffect(() => {
     const retrieve = async () => {

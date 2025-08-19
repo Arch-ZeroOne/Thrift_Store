@@ -48,6 +48,7 @@ function Navbar() {
 
   useEffect(() => {
     if (currentUser) {
+      //Affects the operations even in the admin because this component is rendered in all components
       if (seller) {
         navigate("/admin");
       }

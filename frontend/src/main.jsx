@@ -10,7 +10,6 @@ import RoleContext from "./context/RoleContext";
 import CartContext from "./context/CartContext";
 import FormContext from "./context/FormContext";
 import PopUpModalContext from "./context/PopupModalContext";
-import Navbar from "./components/Navbar";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
