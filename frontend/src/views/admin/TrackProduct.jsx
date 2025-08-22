@@ -67,7 +67,7 @@ function TrackProduct() {
       field: "actions",
       headerName: "Actions",
       headerStyle: header_style,
-      cellRenderer: ActionsComponents,
+      cellRenderer: ViewButton,
       width: 200,
     },
   ]);
@@ -103,38 +103,34 @@ function TrackProduct() {
             defaultColDef={defaultColDef}
             rowHeight={85}
             rowSelection="multiple"
+            context={{
+              showProductInfo: (product) => {
+                console.log(product);
+                const {
+                  product_name,
+                  image,
+                  description,
+                  category,
+                  price,
+                  discount,
+                } = product;
+
+                const payload = {
+                  product_name,
+                  image,
+                  description,
+                  category,
+                  price,
+                  discount,
+                };
+
+                return payload;
+              },
+            }}
           />
         </div>
       </div>
     </section>
-  );
-}
-
-function ActionsComponents(params) {
-  const { data } = params;
-
-  /*
-  
-  category,
-  description,
-  discount,
-  price,
-  product_name,
-  stock,
-  image,
-  */
-  return (
-    <div className="flex items-center justify-center h-full">
-      <ViewButton
-        category={data.category}
-        description={data.description}
-        discount={data.description}
-        price={data.price}
-        product_name={data.product_name}
-        stock={data.stock}
-        image={data.image[0]}
-      />
-    </div>
   );
 }
 
@@ -192,45 +188,60 @@ function BadgeRenderer(params) {
   );
 }
 
-function ViewButton({
-  category,
-  description,
-  discount,
-  price,
-  product_name,
-  stock,
-  image,
-}) {
+function ViewButton(props) {
+  const [productData, setproductData] = useState();
+  const handlePopup = () => {
+    const data = props.context.showProductInfo(props.data);
+    console.log(data.category);
+    setproductData(data);
+    const modal = document.getElementById("my_modal_4");
+    modal.showModal();
+  };
+
   return (
     <div className="cursor-pointer font-[Poppins]" title="Expand Details">
-      <i
-        className="fa-solid fa-eye text-lg"
-        onClick={() => document.getElementById("my_modal_4").showModal()}
-      ></i>
-      <dialog id="my_modal_4" className="modal">
-        <div className="modal-box w-30 max-w-5xl">
-          <h3 className="font-bold text-lg">Product Information</h3>
-          <section className="flex items-center gap-5">
-            <div>
-              <img src={image} className="h-50"></img>
-              <p className="font-bold">{product_name}</p>
+      <i className="fa-solid fa-eye text-lg" onClick={() => handlePopup()}></i>
+
+      {productData && (
+        <dialog id="my_modal_4" className="modal">
+          <div className="modal-box w-30 max-w-5xl">
+            <h3 className="font-bold text-lg">Product Information</h3>
+            <section className="flex items-center gap-5">
+              <div>
+                <img className="h-50" src={productData.image[0]}></img>
+              </div>
+              <div>
+                <p className="font-bold text-xl"></p>
+                <p className="text-2xl font-bold">${}</p>
+                <p className="font-medium ">{}</p>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-bold">Category:</h3>
+                  <p className="font-bold text-green-500"></p>
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-bold">Discount:</h3>
+                  <p className="font-bold ">
+                    <span className="text-green-500 font-bold">{}%</span>
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-bold"> Stock:</h3>
+
+                  <p className="font-bold ">
+                    <span className="text-green-500 font-bold">{}</span>
+                  </p>
+                </div>
+              </div>
+            </section>
+            <div className="modal-action">
+              <form method="dialog">
+                {/* if there is a button, it will close the modal */}
+                <button className="btn">Close</button>
+              </form>
             </div>
-            <div>
-              <p>{price}</p>
-              <p>{category}</p>
-              <p>{description}</p>
-              <p>{discount}</p>
-              <p>{stock}</p>
-            </div>
-          </section>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
           </div>
-        </div>
-      </dialog>
+        </dialog>
+      )}
     </div>
   );
 }
