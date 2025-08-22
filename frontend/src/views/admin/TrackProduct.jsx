@@ -4,6 +4,7 @@ import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { getAllProduct } from "../../firebase/products";
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 //Currently following along this tutorial
@@ -115,14 +116,21 @@ function TrackProduct() {
                   discount,
                 } = product;
 
-                const payload = {
-                  product_name,
-                  image,
-                  description,
-                  category,
-                  price,
-                  discount,
-                };
+                Swal.fire({
+                  imageUrl: image[0],
+                  imageHeight: 300,
+                  imageAlt: "A tall image",
+                  width: 600,
+                  html: `
+                   <div style="font-family:Poppins">
+                   <p style="font-weight:bold; font-size:30px">${product_name}</p>
+                   <p style="font-weight:medium; font-size:25px";color:green;>$${price}</p>
+                   <p  style="font-weight:medium; font-size:25px";color:green;>${description}</p>
+                   <p  style="font-weight:medium; font-size:25px";color:green;>${category}</p>
+                   <p  style="font-weight:medium; font-size:25px";color:green;>${discount}</p>
+                   </div>
+                   `,
+                });
 
                 return payload;
               },
@@ -189,59 +197,12 @@ function BadgeRenderer(params) {
 }
 
 function ViewButton(props) {
-  const [productData, setproductData] = useState();
-  const handlePopup = () => {
-    const data = props.context.showProductInfo(props.data);
-    console.log(data.category);
-    setproductData(data);
-    const modal = document.getElementById("my_modal_4");
-    modal.showModal();
-  };
-
   return (
     <div className="cursor-pointer font-[Poppins]" title="Expand Details">
-      <i className="fa-solid fa-eye text-lg" onClick={() => handlePopup()}></i>
-
-      {productData && (
-        <dialog id="my_modal_4" className="modal">
-          <div className="modal-box w-30 max-w-5xl">
-            <h3 className="font-bold text-lg">Product Information</h3>
-            <section className="flex items-center gap-5">
-              <div>
-                <img className="h-50" src={productData.image[0]}></img>
-              </div>
-              <div>
-                <p className="font-bold text-xl"></p>
-                <p className="text-2xl font-bold">${}</p>
-                <p className="font-medium ">{}</p>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-bold">Category:</h3>
-                  <p className="font-bold text-green-500"></p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-bold">Discount:</h3>
-                  <p className="font-bold ">
-                    <span className="text-green-500 font-bold">{}%</span>
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-bold"> Stock:</h3>
-
-                  <p className="font-bold ">
-                    <span className="text-green-500 font-bold">{}</span>
-                  </p>
-                </div>
-              </div>
-            </section>
-            <div className="modal-action">
-              <form method="dialog">
-                {/* if there is a button, it will close the modal */}
-                <button className="btn">Close</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
-      )}
+      <i
+        className="fa-solid fa-eye text-lg"
+        onClick={() => props.context.showProductInfo(props.data)}
+      ></i>
     </div>
   );
 }
