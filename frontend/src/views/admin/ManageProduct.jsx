@@ -5,7 +5,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 import { AgGridReact } from "ag-grid-react";
 import { getAllProduct } from "../../firebase/products";
 import { usePopUp } from "../../context/PopupModalContext";
-import Swal from "sweetalert2";
+import {
+  header_style,
+  ImageRenderer,
+  CenterText,
+  ViewButton,
+  BadgeRenderer,
+} from "./TrackProduct";
 
 function ManageProduct() {
   const { showModal } = usePopUp();
@@ -14,40 +20,60 @@ function ManageProduct() {
     {
       field: "image",
       headerName: "Image",
+      cellRenderer: ImageRenderer,
+      headerStyle: header_style,
     },
 
     {
       field: "product_name",
-      headerName: "Product Name",
+      headerName: "Name",
+      flex: 5,
+      headerStyle: header_style,
+      cellRenderer: CenterText,
     },
 
     {
       field: "stock",
       headerName: "Stock",
+      headerStyle: header_style,
+      cellRenderer: CenterText,
     },
     {
       field: "category",
-      headerName: "Product Category",
+      headerName: "Category",
+      headerStyle: header_style,
+      cellRenderer: CenterText,
     },
     {
       field: "price",
-      headerName: "Original Price",
+      headerName: "Price",
+      headerStyle: header_style,
+      cellRenderer: CenterText,
     },
     {
       field: "discount",
       headerName: "Discount",
+      headerStyle: header_style,
+      cellRenderer: CenterText,
     },
     {
       field: "status",
       headerName: "Status",
+      headerStyle: header_style,
+      cellRenderer: BadgeRenderer,
     },
     {
       field: "prodId",
       headerName: "Actions",
-      cellRenderer: ActionButtons,
+      cellRenderer: ViewButton,
       width: 200,
+      headerStyle: header_style,
     },
   ]);
+
+  const defaultColDef = {
+    flex: 3,
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -63,8 +89,13 @@ function ManageProduct() {
       <section className="w-full flex flex-col gap-5">
         <Header />
         <div className="flex justify-center w-full">
-          <div style={{ height: 500, width: 900 }}>
-            <AgGridReact rowData={rowData} columnDefs={colDefs} />
+          <div style={{ height: 500, width: 950 }}>
+            <AgGridReact
+              rowData={rowData}
+              rowHeight={85}
+              columnDefs={colDefs}
+              defaultColDef={defaultColDef}
+            />
           </div>
         </div>
       </section>
@@ -72,70 +103,7 @@ function ManageProduct() {
   );
 }
 
-function ActionButtons() {
-  return (
-    <div className="w-full h-full flex gap-5">
-      <EditButton />
-      <DeleteButton />
-    </div>
-  );
-}
-function EditButton() {
-  const { setShowModal } = usePopUp();
-
-  return (
-    <div onClick={() => setShowModal(true)} className="cursor-pointer">
-      <i class="fa-solid fa-pen-to-square text-lg text-green-500"></i>
-    </div>
-  );
-}
-
-function DeleteButton() {
-  const showDeleteModal = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete Item",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-      }
-    });
-  };
-  return (
-    <div onClick={() => showDeleteModal()} className="cursor-pointer">
-      <i class="fa-solid fa-trash text-lg text-red-500"></i>
-    </div>
-  );
-}
 function EditModal() {
-  const showConfirmation = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Confirm",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-      }
-    });
-  };
   return (
     <section className="absolute  w-full h-full bg-[rgb(0,0,0,0.5)] z-50 ">
       <div className="flex justify-center items-center relative w-[80%] mr-auto ml-auto">
@@ -219,10 +187,7 @@ function EditModal() {
             </div>
           </section>
           <div className="flex">
-            <button
-              className="btn btn-neutral mt-4 w-100 ml-auto mr-auto"
-              onClick={() => showConfirmation()}
-            >
+            <button className="btn btn-neutral mt-4 w-100 ml-auto mr-auto">
               Update
             </button>
           </div>
@@ -236,7 +201,7 @@ function BackButton() {
   const { setShowModal } = usePopUp();
 
   return (
-    <section onClick={() => setShowModal(false)}>
+    <section>
       <button class="group flex items-center justify-center relative z-10 [transition:all_0.5s_ease] rounded-[0.375rem] p-[5px] cursor-pointer border border-[#999] outline-none focus-visible:outline-0">
         <svg
           fill="currentColor"

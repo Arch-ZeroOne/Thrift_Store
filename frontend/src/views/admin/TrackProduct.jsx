@@ -6,18 +6,18 @@ import { getAllProduct } from "../../firebase/products";
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 ModuleRegistry.registerModules([AllCommunityModule]);
-
+export const header_style = {
+  fontFamily: "Ubuntu",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 //Currently following along this tutorial
 //* Youtube Channel Link
 //https://www.youtube.com/watch?v=Pr__B6HM_s4
 function TrackProduct() {
   //default styles for the table header
-  const header_style = {
-    fontFamily: "Poppins",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+
   //Setting the data into states gives us the ability to change or modify the data
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([
@@ -104,37 +104,7 @@ function TrackProduct() {
             defaultColDef={defaultColDef}
             rowHeight={85}
             rowSelection="multiple"
-            context={{
-              showProductInfo: (product) => {
-                console.log(product);
-                const {
-                  product_name,
-                  image,
-                  description,
-                  category,
-                  price,
-                  discount,
-                } = product;
-
-                Swal.fire({
-                  imageUrl: image[0],
-                  imageHeight: 300,
-                  imageAlt: "A tall image",
-                  width: 600,
-                  html: `
-                   <div style="font-family:Poppins">
-                   <p style="font-weight:bold; font-size:30px">${product_name}</p>
-                   <p style="font-weight:medium; font-size:25px";color:green;>$${price}</p>
-                   <p  style="font-weight:medium; font-size:25px";color:green;>${description}</p>
-                   <p  style="font-weight:medium; font-size:25px";color:green;>${category}</p>
-                   <p  style="font-weight:medium; font-size:25px";color:green;>${discount}</p>
-                   </div>
-                   `,
-                });
-
-                return payload;
-              },
-            }}
+            popupParent={document.body}
           />
         </div>
       </div>
@@ -142,20 +112,20 @@ function TrackProduct() {
   );
 }
 
-function ImageRenderer(params) {
+export function ImageRenderer(params) {
   const image = params.value[0];
 
   return (
     <div className="flex items-center justify-center h-full">
-      <img className="h-full   w-20 rounded-xl " src={image}></img>
+      <img className="h-full   w-18 rounded-4xl " src={image}></img>
     </div>
   );
 }
 
-function CenterText(params) {
+export function CenterText(params) {
   const text = params.value;
   return (
-    <p className=" font-[Poppins]  flex items-center justify-center h-full">
+    <p className=" font-[Ubuntu]  flex items-center justify-center h-full">
       {text}
     </p>
   );
@@ -164,31 +134,35 @@ function CenterText(params) {
 function CheckboxRenderer(props) {
   const handleChange = (e) => {};
 
-  return <input type="checkbox"></input>;
+  return (
+    <div className="flex items-center justify-center h-full">
+      <input type="checkbox"></input>
+    </div>
+  );
 }
 
-function BadgeRenderer(params) {
+export function BadgeRenderer(params) {
   const text = params.value;
   let style = "";
 
   if (text === "Available") {
-    style = "badge badge-success";
+    style = "badge badge-soft badge-success";
   } else if (text === "Low Stock") {
-    style = "badge badge-warning";
+    style = "badge badge-soft badge-warning";
   } else {
-    style = "badge badge-error";
+    style = "badge badge-soft badge-error";
   }
 
   return (
     <div
       className={style}
       style={{
-        fontFamily: "Poppins",
-        color: "white",
+        fontFamily: "Ubuntu",
         display: "flex",
         marginTop: "30px",
         alignItems: "center",
         justifyContent: "center",
+        padding: "15px",
       }}
     >
       {text}
@@ -196,13 +170,46 @@ function BadgeRenderer(params) {
   );
 }
 
-function ViewButton(props) {
+export function ViewButton() {
   return (
-    <div className="cursor-pointer font-[Poppins]" title="Expand Details">
-      <i
-        className="fa-solid fa-eye text-lg"
-        onClick={() => props.context.showProductInfo(props.data)}
-      ></i>
+    <div className="w-full flex justify-center h-full items-center">
+      <button
+        className="hover:opacity-50 cursor-pointer"
+        popoverTarget="popover-1"
+        style={{ anchorName: "--anchor-1" } /* as React.CSSProperties */}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+          />
+        </svg>
+      </button>
+
+      <ul
+        className="dropdown menu  rounded-box bg-base-100 shadow-sm font-[Ubuntu]"
+        popover="auto"
+        id="popover-1"
+        style={{ width: "300px", display: "flex", alignItems: "center" }}
+      >
+        <li>
+          <a>Copy Product ID</a>
+        </li>
+        <li>
+          <a>Edit Product</a>
+        </li>
+        <li>
+          <a>View Product</a>
+        </li>
+      </ul>
     </div>
   );
 }
