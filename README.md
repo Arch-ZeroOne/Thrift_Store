@@ -1,49 +1,50 @@
-# 🛒 React E-Commerce App
+# 🛍️ UrbanFlick
 
-A modern e-commerce web application built using **React** for the frontend, **Firebase** for backend services (authentication, database, and storage), **React Router** for routing, and **DaisyUI** for pre-styled components.
+> Buy, Sell, Grow — All in One Place.  
+> UrbanFlick is a modern e-commerce platform where users can browse products, explore categories, and shop with ease. Sellers can manage their inventory and track orders with a simple, intuitive dashboard. Designed with React and Tailwind CSS, UrbanFlick ensures a fast and seamless online shopping experience.
 
----
+⚠️ **Note:** This project is still **incomplete** and currently **under active development**. Some features may be missing or not fully functional.
 
-## 🔧 Tech Stack
+## 🧷 Live Demo
 
-| Tech        | Description                                      |
-|-------------|--------------------------------------------------|
-| **React**   | JavaScript library for building the user interface |
-| **Firebase**| Backend services - Auth, Firestore, Storage       |
-| **React Router** | Client-side routing                           |
-| **DaisyUI** | UI components built on top of Tailwind CSS       |
+👉 [View Website](https://your-vercel-link.vercel.app/)
 
----
+## 🌐 Preview
 
-## ✨ Features
+![App Screenshot](./frontend/public/snap/add-product.png)  
+![App Screenshot](./frontend/public/snap/allproduct.png)  
+![App Screenshot](./frontend/public/snap/auth.png)
+![App Screenshot](./frontend/public/snap/home.png)
+![App Screenshot](./frontend/public/snap/manage-product.png)
+![App Screenshot](./frontend/public/snap/menu.png)
+![App Screenshot](./frontend/public/snap/trending.png)
 
-- 🔐 **User Authentication**
-  - Sign Up, Login, and Logout
-  - Firebase Auth integration
+## 🛠️ Built With
 
-- 🛍️ **Product Catalog**
-  - Display of products from Firebase Firestore
-  - Product image, name, price, and description
+- **Technologies:** React.js, JavaScript, Tailwind CSS
+- **Backend:** Node.js / Express.js (for token routes)
+- **Database:** Firebase
+- **Hosting:** Vercel (frontend) Render (backend)
 
-- 🛒 **Shopping Cart**
-  - Add/Remove items to cart
-  - Quantity update and total price calculation
+## ⭐ Features
 
-- 📦 **Checkout Process**
-  - Simple checkout form
-  - Order placement logic (optional)
+- 🏠 **Homepage with Categories** – Explore fashion, electronics, home, and more.
+- 🛒 **Product Browsing** – View all available products with details and pricing.
+- 🔍 **Search Functionality** – Quickly find products by name.
+- 👤 **User Authentication (Planned)** – Secure login and profile system.
+- 📦 **Seller Dashboard** – Manage products, inventory, and orders.
+- 💳 **Cart & Checkout (Planned)** – Seamless shopping experience.
 
-- 🗺️ **Routing**
-  - Homepage
-  - Product Details
-  - Cart Page
-  - Login / Register
-  - Protected Routes (authenticated access)
+## 🙏 Credits
 
-- 🎨 **Responsive UI**
-  - DaisyUI for consistent design and mobile responsiveness
+This project is built as part of my learning journey in React and modern web development.  
+Special thanks to open-source resources and the dev community for guidance and inspiration.
 
----
+## 💼 Open for Commission
 
-## 📁 Folder Structure (Simplified)
+I’m currently available for freelance work—especially building modern web apps and e-commerce platforms!  
+Feel free to reach out through the platforms below:
 
+- 📘 [Facebook](https://www.facebook.com/windyl.monton.3)
+- 📷 [Instagram](https://www.instagram.com/devwindyl/)
+- 💻 [GitHub](https://github.com/Arch-ZeroOne)
