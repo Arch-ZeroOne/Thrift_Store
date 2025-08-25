@@ -114,7 +114,7 @@ function Form() {
     );
   }
   return (
-    <div className="font-[Poppins] flex flex-col items-center gap-7 h-screen overflow-scroll p-5 ">
+    <div className="font-[Ubuntu] flex flex-col items-center gap-7 h-screen overflow-scroll p-5 ">
       <div className="flex items-center justify-around w-full">
         <PageTitle />
         <Button onClick={handleSubmit} />

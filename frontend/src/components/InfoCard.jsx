@@ -13,12 +13,13 @@ function InfoCard({
   return (
     <div className="font-[Geist] ">
       <div className="flex  items-center justify-between  bg-base-100 shadow-sm w-[98%] mt-5  mb-8 border border-gray-500/40 rounded-md p-10 ml-auto mr-auto ">
-        <img
-          className="h-100 w-[40%] ml-auto mr-auto"
-          src={image}
-          alt="Product Info"
-        />
-
+        {image && (
+          <img
+            className="h-100 w-[30%] ml-auto mr-auto"
+            src={image[0]}
+            alt="Product Info"
+          />
+        )}
         <section className="flex items-center flex-col  h-full gap-10 self-start w-[40%] pr-10 ">
           <div className="flex flex-col gap-5 h-full ">
             <div className="flex flex-col gap-5">

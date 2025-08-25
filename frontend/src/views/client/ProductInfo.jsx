@@ -47,7 +47,7 @@ function ProductInfo() {
     }
   }, [currentUser]);
 
-  const handleCart = (name, price, image, newQuantity) => {
+  const handleCart = (name, price, image) => {
     if (!currentUser) {
       toast.error("Please Log In First!");
       return;
@@ -125,7 +125,7 @@ function Similar({ category, product_name }) {
       const data = await getSimilar(category);
       if (data) {
         const filtered = data.filter(
-          (name) => category.product_name != product_name
+          (product) => product.product_name != product_name
         );
         setSimilars(filtered);
       } else {
