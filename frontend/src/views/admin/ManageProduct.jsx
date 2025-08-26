@@ -22,6 +22,8 @@ function ManageProduct() {
       headerName: "Image",
       cellRenderer: ImageRenderer,
       headerStyle: header_style,
+      filter: true,
+      sortable: true,
     },
 
     {
@@ -30,6 +32,8 @@ function ManageProduct() {
       flex: 5,
       headerStyle: header_style,
       cellRenderer: CenterText,
+      filter: true,
+      sortable: true,
     },
 
     {
@@ -37,24 +41,32 @@ function ManageProduct() {
       headerName: "Stock",
       headerStyle: header_style,
       cellRenderer: CenterText,
+      filter: true,
+      sortable: true,
     },
     {
       field: "category",
       headerName: "Category",
       headerStyle: header_style,
       cellRenderer: CenterText,
+      filter: true,
+      sortable: true,
     },
     {
       field: "price",
       headerName: "Price",
       headerStyle: header_style,
       cellRenderer: CenterText,
+      filter: true,
+      sortable: true,
     },
     {
       field: "discount",
       headerName: "Discount",
       headerStyle: header_style,
       cellRenderer: CenterText,
+      filter: true,
+      sortable: true,
     },
     {
       field: "status",

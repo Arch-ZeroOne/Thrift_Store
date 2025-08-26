@@ -40,7 +40,7 @@ function AllProducts() {
                 <TrendingCard
                   name={item.product_name}
                   description={item.description}
-                  image={item.image[0]}
+                  image={item.image}
                   price={item.price}
                 />
               </motion.button>

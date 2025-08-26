@@ -141,7 +141,7 @@ function TrendingProducts() {
         </div>
         <button className="btn btn-neutral btn-outline">
           <i className="fa-solid fa-arrow-right-long"></i>
-          <Link to="/allProduct">View All Products</Link>
+          <Link to="/allProducts">View All Products</Link>
         </button>
       </div>
       <div className="grid grid-cols-3 gap-8 p-2 w-[95%] mr-auto ml-auto mb-10">
@@ -152,12 +152,12 @@ function TrendingProducts() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link to={`allProduct/productinfo/${item.id}`}>
+                <Link to={`allproducts/productinfo/${item.id}`}>
                   <TrendingCard
                     key={item.id}
                     name={item.data.product_name}
                     description={item.data.description}
-                    image={item.data.image[0]}
+                    image={item.data.image}
                     price={item.data.price}
                   />
                 </Link>
