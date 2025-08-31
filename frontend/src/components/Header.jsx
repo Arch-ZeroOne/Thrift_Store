@@ -12,9 +12,14 @@ function Header() {
 
   //Navigates to base route if there is no user logged in
   useEffect(() => {
-    !currentUser ? navigate("/") : "";
-    setEmail(currentUser.email);
-    setPhoto(currentUser.photoURL);
+    if (currentUser) {
+      setEmail(currentUser.email);
+      setPhoto(currentUser.photoURL);
+      return;
+    }
+
+    //*Navigates if there is no current user
+    navigate("/");
   }, [currentUser]);
 
   return (
